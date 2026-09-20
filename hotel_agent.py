@@ -1,7 +1,10 @@
+
 import os
+import time
+
 from tavily import TavilyClient
 from groq import Groq
-import time
+
 
 # ============================================================
 # API KEYS
@@ -10,15 +13,17 @@ import time
 TAVILY_API_KEY = os.getenv("TAVILY_API_KEY")
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 
-# ============================================================
-# INITIALIZE APIs
-# ============================================================
 
 if not TAVILY_API_KEY:
     raise ValueError("TAVILY_API_KEY is not set")
 
 if not GROQ_API_KEY:
     raise ValueError("GROQ_API_KEY is not set")
+
+
+# ============================================================
+# INITIALIZE APIs
+# ============================================================
 
 tavily = TavilyClient(
     api_key=TAVILY_API_KEY
@@ -28,23 +33,25 @@ groq = Groq(
     api_key=GROQ_API_KEY
 )
 
+
+MODEL_NAME = "openai/gpt-oss-120b"
+
+
 # ============================================================
 # SEARCH HOTEL
 # ============================================================
 
 def search_hotel(hotel_name):
 
-    print("\n🔎 Searching the web for hotel reviews...")
-    print("Please wait...\n")
+    print("Searching hotel reviews...")
 
     query = f"""
     {hotel_name} hotel reviews
-    customer reviews
-    guest experience
+    customer experiences
     hotel rating
     cleanliness
     rooms
-    staff service
+    staff and service
     food
     location
     complaints
@@ -64,8 +71,7 @@ def search_hotel(hotel_name):
 
     except Exception as e:
 
-        print("\n❌ Tavily Error:")
-        print(e)
+        print("Tavily Error:", repr(e))
 
         return None
 
@@ -76,17 +82,16 @@ def search_hotel(hotel_name):
 
 def extract_information(search_results):
 
+    if not search_results:
+        return ""
+
     information = ""
 
-    answer = search_results.get(
-        "answer",
-        ""
-    )
+    answer = search_results.get("answer", "")
 
     if answer:
 
         information += f"""
-
 TAVILY SUMMARY:
 
 {answer}
@@ -94,33 +99,15 @@ TAVILY SUMMARY:
 ==================================================
 """
 
-
-    results = search_results.get(
-        "results",
-        []
-    )
-
+    results = search_results.get("results", [])
 
     for i, result in enumerate(results):
 
-        title = result.get(
-            "title",
-            "Unknown"
-        )
-
-        content = result.get(
-            "content",
-            ""
-        )
-
-        url = result.get(
-            "url",
-            ""
-        )
-
+        title = result.get("title", "Unknown")
+        content = result.get("content", "")
+        url = result.get("url", "")
 
         information += f"""
-
 SOURCE {i + 1}
 
 TITLE:
@@ -135,7 +122,6 @@ URL:
 ==================================================
 """
 
-
     return information
 
 
@@ -145,14 +131,12 @@ URL:
 
 def analyze_hotel(hotel_name, hotel_information):
 
-    print("🤖 Groq is analyzing the hotel...")
-    print("Please wait...\n")
+    print("Groq is analyzing the hotel...")
 
     prompt = f"""
 You are an AI Hotel Review Analyst.
 
-Analyze the following hotel using ONLY the supplied
-web research.
+Analyze the hotel using ONLY the supplied web research.
 
 HOTEL NAME:
 {hotel_name}
@@ -160,36 +144,13 @@ HOTEL NAME:
 WEB RESEARCH:
 {hotel_information}
 
-
 Create a professional hotel review report.
-
-IMPORTANT:
-
-Do NOT create a report title.
-
-Do NOT write:
-
-AI HOTEL REVIEW REPORT
-
-Do NOT use lines such as:
-
-==================================================
-
-Do NOT write:
-
-HOTEL: {hotel_name}
-
 
 Use exactly these sections:
 
 1. ⭐ OVERALL IMPRESSION
 
 2. 😊 OVERALL SENTIMENT
-
-Choose one:
-Positive
-Neutral
-Negative
 
 3. 👍 WHAT GUESTS LIKE
 
@@ -211,16 +172,16 @@ Negative
 
 12. 💡 FINAL AI SUMMARY
 
-
 RULES:
 
-• Do NOT invent information.
-• Only use supplied research.
-• If information is unavailable, say "Not enough information."
-• Do not treat one review as a universal fact.
-• Mention recurring patterns where possible.
-• Keep the language professional and concise.
-• Use bullet points where useful.
+- Do not invent information.
+- Use only the supplied research.
+- If information is unavailable, say "Not enough information."
+- Do not treat one review as a universal fact.
+- Mention recurring patterns where possible.
+- Keep the language professional and concise.
+- Use bullet points where useful.
+- Do not add a report title.
 """
 
     for attempt in range(3):
@@ -229,33 +190,44 @@ RULES:
 
             response = groq.chat.completions.create(
 
-                model="openai/gpt-oss-120b",
+                model=MODEL_NAME,
 
                 messages=[
+
                     {
                         "role": "system",
                         "content": (
                             "You are a professional hotel review "
-                            "analyst. Follow the instructions "
-                            "strictly and do not invent information."
+                            "analyst. Use only the supplied research."
                         )
                     },
+
                     {
                         "role": "user",
                         "content": prompt
                     }
+
                 ],
 
                 temperature=0.3,
-
                 max_tokens=4000
+
             )
 
-            return response.choices[0].message.content
+            result = response.choices[0].message.content
+
+            if result and result.strip():
+                return result.strip()
+
+            print("Groq returned an empty response.")
+
+            return None
 
         except Exception as e:
 
             error = str(e)
+
+            print(f"Groq Error (Attempt {attempt + 1}):", error)
 
             if (
                 "429" in error
@@ -264,22 +236,131 @@ RULES:
                 or "timeout" in error.lower()
             ):
 
-                print(
-                    f"⚠️ Groq temporarily unavailable. "
-                    f"Retrying... ({attempt + 1}/3)"
-                )
+                if attempt < 2:
+                    time.sleep(4)
+                    continue
 
-                time.sleep(4)
+            return None
 
-            else:
-
-                print("\n❌ Groq Error:")
-                print(e)
-
-                return None
+    return None
 
 
-    print("\n❌ Groq is currently unavailable.")
+# ============================================================
+# CHAT ABOUT HOTEL
+# ============================================================
+
+def chat_about_hotel(
+    hotel_name,
+    question,
+    analysis,
+    sources
+):
+
+    print("Generating chatbot response...")
+
+    source_text = ""
+
+    for i, source in enumerate(sources):
+
+        title = source.get("title", "")
+        content = source.get("content", "")
+        url = source.get("url", "")
+
+        source_text += f"""
+SOURCE {i + 1}
+
+TITLE:
+{title}
+
+CONTENT:
+{content}
+
+URL:
+{url}
+
+==================================================
+"""
+
+    prompt = f"""
+You are StayWise AI, a hotel review assistant.
+
+HOTEL NAME:
+{hotel_name}
+
+PREVIOUS AI ANALYSIS:
+{analysis}
+
+RESEARCH SOURCES:
+{source_text}
+
+USER QUESTION:
+{question}
+
+INSTRUCTIONS:
+
+- Answer using only the supplied analysis and research.
+- Do not invent hotel information.
+- If the information is unavailable, say:
+  "Not enough information from the available research."
+- Be helpful, professional, and concise.
+- Use bullet points where useful.
+"""
+
+    for attempt in range(3):
+
+        try:
+
+            response = groq.chat.completions.create(
+
+                model=MODEL_NAME,
+
+                messages=[
+
+                    {
+                        "role": "system",
+                        "content": (
+                            "You are a helpful hotel review assistant. "
+                            "Never invent information."
+                        )
+                    },
+
+                    {
+                        "role": "user",
+                        "content": prompt
+                    }
+
+                ],
+
+                temperature=0.3,
+                max_tokens=1500
+
+            )
+
+            result = response.choices[0].message.content
+
+            if result and result.strip():
+                return result.strip()
+
+            return None
+
+        except Exception as e:
+
+            error = str(e)
+
+            print(f"Chat Error (Attempt {attempt + 1}):", error)
+
+            if (
+                "429" in error
+                or "rate_limit" in error.lower()
+                or "503" in error
+                or "timeout" in error.lower()
+            ):
+
+                if attempt < 2:
+                    time.sleep(4)
+                    continue
+
+            return None
 
     return None
 
@@ -290,119 +371,51 @@ RULES:
 
 def main():
 
-    print("\n")
     print("=" * 60)
-    print("          🏨 AI HOTEL REVIEW AGENT")
+    print("AI HOTEL REVIEW AGENT")
     print("=" * 60)
 
-    print(
-        "\nThis AI Agent uses:"
-        "\n🔎 Tavily → Web Research"
-        "\n🤖 Groq → Review Analysis"
-    )
-
-    print("\n" + "=" * 60)
-
-
-    hotel_name = input(
-        "\n🏨 Enter hotel name: "
-    ).strip()
-
+    hotel_name = input("Enter hotel name: ").strip()
 
     if not hotel_name:
-
-        print(
-            "\n❌ Please enter a hotel name."
-        )
-
+        print("Please enter a hotel name.")
         return
 
+    search_results = search_hotel(hotel_name)
 
-    search_results = search_hotel(
-        hotel_name
-    )
-
-
-    if search_results is None:
+    if not search_results:
+        print("Hotel search failed.")
         return
 
-
-    hotel_information = extract_information(
-        search_results
-    )
-
+    hotel_information = extract_information(search_results)
 
     if not hotel_information.strip():
-
-        print(
-            "\n❌ No information found."
-        )
-
+        print("No information found.")
         return
-
-
-    print(
-        "✅ Hotel information collected!"
-    )
-
-
-    results = search_results.get(
-        "results",
-        []
-    )
-
-
-    print("\n" + "=" * 60)
-    print("🌐 SOURCES USED")
-    print("=" * 60)
-
-
-    for i, result in enumerate(results):
-
-        title = result.get(
-            "title",
-            "Unknown"
-        )
-
-        url = result.get(
-            "url",
-            ""
-        )
-
-        print(
-            f"\n{i + 1}. {title}"
-        )
-
-        print(
-            f"   {url}"
-        )
-
 
     analysis = analyze_hotel(
         hotel_name,
         hotel_information
     )
 
-
-    if analysis is None:
+    if not analysis:
+        print("AI analysis failed.")
         return
 
-
-    print("\n")
+    print("\nAI HOTEL REVIEW REPORT")
     print("=" * 60)
-    print("              🤖 AI ANALYSIS")
-    print("=" * 60)
-
     print(analysis)
 
-    print("\n" + "=" * 60)
-    print("✅ Hotel analysis completed!")
+    print("\nSOURCES")
     print("=" * 60)
 
+    for i, result in enumerate(
+        search_results.get("results", [])
+    ):
 
-# ============================================================
-# RUN
-# ============================================================
-    
+        print(f"{i + 1}. {result.get('title', 'Unknown')}")
+        print(result.get("url", ""))
+
+
 if __name__ == "__main__":
     main()
