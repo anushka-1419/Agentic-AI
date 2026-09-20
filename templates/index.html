@@ -5,7 +5,10 @@
 
     <meta charset="UTF-8">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>StayWise AI | Hotel Review Agent</title>
 
@@ -15,6 +18,7 @@
     >
 
 </head>
+
 
 <body>
 
@@ -27,25 +31,21 @@
 
     <div class="logo">
 
-        <span class="logo-mark">S</span>
+        <span class="logo-star">✦</span>
 
-        <span class="logo-text">
+        <span>
             StayWise
-            <span>AI</span>
+            <span class="logo-ai">AI</span>
         </span>
 
     </div>
 
 
-    <div class="nav-links">
+    <div class="nav-status">
 
-        <a href="#home">Home</a>
+        <span class="status-dot"></span>
 
-        <a href="#about">About</a>
-
-        <a href="#resultsSection">Analysis</a>
-
-        <button class="menu-button">☰</button>
+        AI-Powered Hotel Intelligence
 
     </div>
 
@@ -57,45 +57,35 @@
 <!-- HERO -->
 <!-- ================================================= -->
 
-<section class="hero" id="home">
+<section class="hero">
 
-    <div class="hero-line"></div>
+    <div class="hero-glow"></div>
+
 
     <div class="hero-content">
 
+        <div class="badge">
 
-        <div class="eyebrow">
+            <span>✦</span>
 
-            <span></span>
-
-            AI HOTEL REVIEW INTELLIGENCE
-
-            <span></span>
+            AI HOTEL REVIEW AGENT
 
         </div>
 
 
         <h1>
 
-            WELCOME TO
+            Make smarter
 
-            <strong>STAYWISE</strong>
+            <span>hotel decisions.</span>
 
         </h1>
 
 
-        <p class="hero-tagline">
+        <p>
 
-            WHERE INTELLIGENCE MEETS HOSPITALITY
-
-        </p>
-
-
-        <p class="hero-description">
-
-            Discover what guests really think. StayWise AI researches
-            hotel reviews across the web and transforms them into one
-            clear, intelligent report.
+            Search guest experiences across the web and let AI
+            transform them into one clear, intelligent hotel report.
 
         </p>
 
@@ -105,7 +95,7 @@
         <div class="search-container">
 
             <div class="search-icon">
-                ⌕
+                🔍
             </div>
 
 
@@ -122,7 +112,7 @@
                 onclick="analyzeHotel()"
             >
 
-                ANALYZE
+                Analyze Hotel
 
                 <span>→</span>
 
@@ -133,7 +123,10 @@
 
         <div class="search-hint">
 
-            TRY: Taj Mahal Palace Mumbai · The Oberoi Delhi · Marriott Pune
+            Try:
+            Taj Mahal Palace Mumbai ·
+            The Oberoi Delhi ·
+            Marriott Pune
 
         </div>
 
@@ -141,72 +134,17 @@
         <div class="hero-features">
 
             <div>
-                WEB RESEARCH
+                ✦ Web Research
             </div>
-
-            <span>◆</span>
 
             <div>
-                AI ANALYSIS
+                ✦ AI Analysis
             </div>
-
-            <span>◆</span>
 
             <div>
-                EVIDENCE BASED
+                ✓ Evidence Based
             </div>
 
-        </div>
-
-    </div>
-
-</section>
-
-
-
-<!-- ================================================= -->
-<!-- ABOUT STRIP -->
-<!-- ================================================= -->
-
-<section class="about-strip" id="about">
-
-    <div class="about-item">
-
-        <span class="about-number">01</span>
-
-        <div>
-            <small>RESEARCH</small>
-            <strong>Web Intelligence</strong>
-        </div>
-
-    </div>
-
-
-    <div class="about-divider"></div>
-
-
-    <div class="about-item">
-
-        <span class="about-number">02</span>
-
-        <div>
-            <small>ANALYSIS</small>
-            <strong>AI-Powered Insights</strong>
-        </div>
-
-    </div>
-
-
-    <div class="about-divider"></div>
-
-
-    <div class="about-item">
-
-        <span class="about-number">03</span>
-
-        <div>
-            <small>RESULT</small>
-            <strong>Clear Hotel Report</strong>
         </div>
 
     </div>
@@ -226,17 +164,10 @@
 
     <div class="loading-card">
 
-        <div class="loading-symbol">
-            ✦
-        </div>
-
-        <div class="eyebrow">
-            PLEASE WAIT
-        </div>
+        <div class="loader"></div>
 
         <h2>
-            Preparing your
-            <em>hotel report</em>
+            Analyzing your hotel...
         </h2>
 
         <p id="loadingText">
@@ -261,7 +192,7 @@
                 class="loading-step active"
             >
 
-                <span>01</span>
+                <span>✓</span>
 
                 Web Research
 
@@ -273,7 +204,7 @@
                 class="loading-step"
             >
 
-                <span>02</span>
+                <span>2</span>
 
                 Review Analysis
 
@@ -285,7 +216,7 @@
                 class="loading-step"
             >
 
-                <span>03</span>
+                <span>3</span>
 
                 AI Report
 
@@ -320,17 +251,17 @@
 >
 
 
-    <!-- RESULT HEADER -->
+    <!-- HEADER -->
 
     <div class="result-header">
 
         <div>
 
-            <div class="eyebrow left">
+            <div class="result-label">
 
                 <span></span>
 
-                HOTEL INTELLIGENCE REPORT
+                AI HOTEL ANALYSIS
 
             </div>
 
@@ -341,8 +272,8 @@
 
 
             <p>
-                An AI-generated analysis based on publicly available
-                web information and guest experiences.
+                Based on publicly available web information
+                and guest experiences.
             </p>
 
         </div>
@@ -353,7 +284,7 @@
             onclick="newSearch()"
         >
 
-            + NEW SEARCH
+            ＋ New Search
 
         </button>
 
@@ -367,9 +298,9 @@
 
         <div class="quick-item">
 
-            <span class="quick-number">
-                01
-            </span>
+            <div class="quick-icon">
+                ✦
+            </div>
 
             <div>
 
@@ -391,9 +322,9 @@
 
         <div class="quick-item">
 
-            <span class="quick-number">
-                02
-            </span>
+            <div class="quick-icon">
+                ◎
+            </div>
 
             <div>
 
@@ -415,9 +346,9 @@
 
         <div class="quick-item">
 
-            <span class="quick-number">
-                03
-            </span>
+            <div class="quick-icon">
+                ✓
+            </div>
 
             <div>
 
@@ -446,19 +377,15 @@
 
         <div class="report-header">
 
-            <div class="report-symbol">
+            <div class="report-icon">
                 ✦
             </div>
 
 
             <div>
 
-                <div class="small-label">
-                    STAYWISE AI
-                </div>
-
                 <h3>
-                    Hotel Review Report
+                    AI Review Report
                 </h3>
 
                 <p>
@@ -494,16 +421,12 @@
 
             <div>
 
-                <div class="small-label">
-                    RESEARCH FOUNDATION
-                </div>
-
                 <h3>
-                    Sources & References
+                    Research Sources
                 </h3>
 
                 <p>
-                    Web sources used to generate this analysis
+                    Sources used to generate this analysis
                 </p>
 
             </div>
@@ -515,7 +438,7 @@
                     0
                 </span>
 
-                SOURCES
+                sources
 
             </div>
 
@@ -539,30 +462,16 @@
 
 <footer>
 
-    <div class="footer-brand">
-
-        <span class="logo-mark small">
-            S
-        </span>
-
-        <span>
-            StayWise AI
-        </span>
-
+    <div>
+        ✦ StayWise AI
     </div>
 
-
     <p>
-        AI-POWERED HOTEL REVIEW INTELLIGENCE
+        AI-powered hotel review intelligence
     </p>
 
-
-    <div class="footer-status">
-
-        <span></span>
-
-        SYSTEM OPERATIONAL
-
+    <div>
+        ● System Operational
     </div>
 
 </footer>
@@ -676,7 +585,7 @@ async function analyzeHotel() {
         true;
 
     analyzeButton.innerHTML =
-        "ANALYZING...";
+        "Analyzing...";
 
 
     progressBar.style.width =
@@ -717,7 +626,7 @@ async function analyzeHotel() {
     const timer2 = setTimeout(() => {
 
         loadingText.innerText =
-            "AI is analyzing the collected reviews";
+            "Gemini AI is analyzing the reviews";
 
         progressBar.style.width =
             "75%";
@@ -833,7 +742,7 @@ async function analyzeHotel() {
             false;
 
         analyzeButton.innerHTML =
-            'ANALYZE <span>→</span>';
+            'Analyze Hotel <span>→</span>';
 
     }
 
@@ -857,7 +766,7 @@ function escapeHTML(text) {
 
 
 /* ================================================= */
-/* FORMAT INLINE */
+/* FORMAT TEXT */
 /* ================================================= */
 
 function formatInline(text) {
@@ -1037,7 +946,7 @@ function formatAnalysis(text) {
 
 
 /* ================================================= */
-/* FORMAT CONTENT */
+/* FORMAT SECTION CONTENT */
 /* ================================================= */
 
 function formatContent(text) {
@@ -1283,7 +1192,7 @@ function showError(message) {
 
 
     analyzeButton.innerHTML =
-        'ANALYZE <span>→</span>';
+        'Analyze Hotel <span>→</span>';
 
 }
 
