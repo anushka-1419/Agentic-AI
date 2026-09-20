@@ -7,59 +7,69 @@ from groq import Groq
 
 
 # ============================================================
-# API KEYS
+# CONFIGURATION
 # ============================================================
 
 TAVILY_API_KEY = os.getenv("TAVILY_API_KEY")
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 
-
-if not TAVILY_API_KEY:
-    raise ValueError("TAVILY_API_KEY is not set")
-
-if not GROQ_API_KEY:
-    raise ValueError("GROQ_API_KEY is not set")
-
-
-# ============================================================
-# INITIALIZE APIs
-# ============================================================
-
-tavily = TavilyClient(
-    api_key=TAVILY_API_KEY
-)
-
-groq = Groq(
-    api_key=GROQ_API_KEY
+GROQ_MODEL = os.getenv(
+    "GROQ_MODEL",
+    "openai/gpt-oss-120b"
 )
 
 
-MODEL_NAME = "openai/gpt-oss-120b"
+# ============================================================
+# CLIENTS
+# ============================================================
+
+tavily = TavilyClient(api_key=TAVILY_API_KEY) if TAVILY_API_KEY else None
+groq = Groq(api_key=GROQ_API_KEY) if GROQ_API_KEY else None
 
 
 # ============================================================
-# SEARCH HOTEL
+# CUSTOM ERROR
+# ============================================================
+
+class HotelAgentError(Exception):
+    pass
+
+
+def validate_clients():
+    if not TAVILY_API_KEY:
+        raise HotelAgentError(
+            "TAVILY_API_KEY is missing. Add it to your environment variables."
+        )
+
+    if not GROQ_API_KEY:
+        raise HotelAgentError(
+            "GROQ_API_KEY is missing. Add it to your environment variables."
+        )
+
+
+# ============================================================
+# TAVILY SEARCH
 # ============================================================
 
 def search_hotel(hotel_name):
-
-    print("Searching hotel reviews...")
+    validate_clients()
 
     query = f"""
     {hotel_name} hotel reviews
-    customer experiences
-    hotel rating
+    guest experiences
     cleanliness
-    rooms
+    room quality
     staff and service
-    food
+    food and dining
     location
+    facilities
     complaints
     value for money
     """
 
-    try:
+    print(f"Searching information for: {hotel_name}")
 
+    try:
         response = tavily.search(
             query=query,
             search_depth="advanced",
@@ -67,48 +77,58 @@ def search_hotel(hotel_name):
             include_answer=True
         )
 
+        if not response:
+            raise HotelAgentError(
+                "Tavily returned an empty response."
+            )
+
+        results = response.get("results", [])
+
+        if not results and not response.get("answer"):
+            raise HotelAgentError(
+                "No hotel information was found by Tavily."
+            )
+
         return response
 
-    except Exception as e:
+    except HotelAgentError:
+        raise
 
-        print("Tavily Error:", repr(e))
+    except Exception as error:
+        print("TAVILY ERROR:", repr(error))
 
-        return None
+        raise HotelAgentError(
+            f"Tavily search failed: {str(error)}"
+        ) from error
 
 
 # ============================================================
-# EXTRACT INFORMATION
+# EXTRACT RESEARCH
 # ============================================================
 
 def extract_information(search_results):
-
     if not search_results:
         return ""
 
-    information = ""
+    information_parts = []
 
     answer = search_results.get("answer", "")
 
     if answer:
-
-        information += f"""
-TAVILY SUMMARY:
-
-{answer}
-
-==================================================
-"""
+        information_parts.append(
+            f"TAVILY SUMMARY:\n{answer}"
+        )
 
     results = search_results.get("results", [])
 
-    for i, result in enumerate(results):
-
-        title = result.get("title", "Unknown")
+    for index, result in enumerate(results, start=1):
+        title = result.get("title", "Unknown source")
         content = result.get("content", "")
         url = result.get("url", "")
 
-        information += f"""
-SOURCE {i + 1}
+        information_parts.append(
+            f"""
+SOURCE {index}
 
 TITLE:
 {title}
@@ -118,304 +138,213 @@ CONTENT:
 
 URL:
 {url}
-
-==================================================
 """
+        )
 
-    return information
+    return "\n\n".join(information_parts).strip()
 
 
 # ============================================================
-# GROQ ANALYSIS
+# AI REPORT
 # ============================================================
 
 def analyze_hotel(hotel_name, hotel_information):
+    validate_clients()
 
-    print("Groq is analyzing the hotel...")
+    if not hotel_information.strip():
+        raise HotelAgentError(
+            "There is no research data available for analysis."
+        )
 
     prompt = f"""
-You are an AI Hotel Review Analyst.
+You are a professional hotel review analyst.
 
-Analyze the hotel using ONLY the supplied web research.
+Analyze the hotel using ONLY the supplied research.
+Do not invent facts, ratings, facilities, or guest opinions.
 
 HOTEL NAME:
 {hotel_name}
 
-WEB RESEARCH:
+RESEARCH:
 {hotel_information}
 
-Create a professional hotel review report.
-
-Use exactly these sections:
+Create a clear report using exactly these numbered sections:
 
 1. ⭐ OVERALL IMPRESSION
-
 2. 😊 OVERALL SENTIMENT
-
 3. 👍 WHAT GUESTS LIKE
-
 4. 👎 COMMON COMPLAINTS
-
 5. 🧹 CLEANLINESS
-
 6. 🛏️ ROOM QUALITY
-
 7. 👨‍💼 STAFF & SERVICE
-
 8. 🍽️ FOOD
-
 9. 📍 LOCATION
-
 10. 💰 VALUE FOR MONEY
-
 11. ⚠️ RECURRING PROBLEMS
-
 12. 💡 FINAL AI SUMMARY
 
-RULES:
+Rules:
 
-- Do not invent information.
 - Use only the supplied research.
-- If information is unavailable, say "Not enough information."
+- If information is unavailable, write "Not enough information."
 - Do not treat one review as a universal fact.
 - Mention recurring patterns where possible.
-- Keep the language professional and concise.
 - Use bullet points where useful.
-- Do not add a report title.
+- Keep the report professional and readable.
+- Do not add a separate report title.
+- Do not use markdown tables.
 """
 
     for attempt in range(3):
-
         try:
+            print(
+                f"Generating AI report... attempt {attempt + 1}/3"
+            )
 
             response = groq.chat.completions.create(
-
-                model=MODEL_NAME,
-
+                model=GROQ_MODEL,
                 messages=[
-
                     {
                         "role": "system",
                         "content": (
-                            "You are a professional hotel review "
-                            "analyst. Use only the supplied research."
+                            "You are a careful hotel review analyst. "
+                            "Use only the supplied research and never "
+                            "invent information."
                         )
                     },
-
                     {
                         "role": "user",
                         "content": prompt
                     }
-
                 ],
-
-                temperature=0.3,
-                max_tokens=4000
-
+                temperature=0.2,
+                max_tokens=6000
             )
 
-            result = response.choices[0].message.content
+            if not response.choices:
+                raise HotelAgentError(
+                    "Groq returned no choices."
+                )
 
-            if result and result.strip():
-                return result.strip()
+            content = response.choices[0].message.content
 
-            print("Groq returned an empty response.")
+            if not content or not content.strip():
+                raise HotelAgentError(
+                    "Groq returned an empty AI report."
+                )
 
-            return None
+            return content.strip()
 
-        except Exception as e:
+        except HotelAgentError:
+            raise
 
-            error = str(e)
+        except Exception as error:
+            error_text = str(error)
 
-            print(f"Groq Error (Attempt {attempt + 1}):", error)
+            print("GROQ ERROR:", repr(error))
 
-            if (
-                "429" in error
-                or "rate_limit" in error.lower()
-                or "503" in error
-                or "timeout" in error.lower()
-            ):
+            temporary_error = (
+                "429" in error_text
+                or "rate_limit" in error_text.lower()
+                or "503" in error_text
+                or "timeout" in error_text.lower()
+                or "temporarily" in error_text.lower()
+            )
 
-                if attempt < 2:
-                    time.sleep(4)
-                    continue
+            if temporary_error and attempt < 2:
+                time.sleep(3)
+                continue
 
-            return None
+            raise HotelAgentError(
+                f"Groq analysis failed: {error_text}"
+            ) from error
 
-    return None
+    raise HotelAgentError(
+        "Groq was unavailable after multiple attempts."
+    )
 
 
 # ============================================================
-# CHAT ABOUT HOTEL
+# CHAT ASSISTANT
 # ============================================================
 
 def chat_about_hotel(
     hotel_name,
     question,
-    analysis,
-    sources
+    analysis="",
+    sources=None
 ):
+    validate_clients()
 
-    print("Generating chatbot response...")
+    sources = sources or []
 
-    source_text = ""
-
-    for i, source in enumerate(sources):
-
-        title = source.get("title", "")
-        content = source.get("content", "")
-        url = source.get("url", "")
-
-        source_text += f"""
-SOURCE {i + 1}
-
-TITLE:
-{title}
-
-CONTENT:
-{content}
-
-URL:
-{url}
-
-==================================================
-"""
+    source_text = "\n".join(
+        f"{source.get('title', '')}: {source.get('url', '')}"
+        for source in sources
+    )
 
     prompt = f"""
 You are StayWise AI, a hotel review assistant.
 
-HOTEL NAME:
+Hotel:
 {hotel_name}
 
-PREVIOUS AI ANALYSIS:
+Existing AI report:
 {analysis}
 
-RESEARCH SOURCES:
+Research sources:
 {source_text}
 
-USER QUESTION:
+User question:
 {question}
 
-INSTRUCTIONS:
+Answer using only the available report and research.
+If the information is unavailable, clearly say:
+"Not enough information."
 
-- Answer using only the supplied analysis and research.
-- Do not invent hotel information.
-- If the information is unavailable, say:
-  "Not enough information from the available research."
-- Be helpful, professional, and concise.
-- Use bullet points where useful.
+Keep the answer concise and useful.
 """
 
-    for attempt in range(3):
+    try:
+        response = groq.chat.completions.create(
+            model=GROQ_MODEL,
+            messages=[
+                {
+                    "role": "system",
+                    "content": (
+                        "You are a helpful and evidence-based "
+                        "hotel review assistant."
+                    )
+                },
+                {
+                    "role": "user",
+                    "content": prompt
+                }
+            ],
+            temperature=0.2,
+            max_tokens=1200
+        )
 
-        try:
-
-            response = groq.chat.completions.create(
-
-                model=MODEL_NAME,
-
-                messages=[
-
-                    {
-                        "role": "system",
-                        "content": (
-                            "You are a helpful hotel review assistant. "
-                            "Never invent information."
-                        )
-                    },
-
-                    {
-                        "role": "user",
-                        "content": prompt
-                    }
-
-                ],
-
-                temperature=0.3,
-                max_tokens=1500
-
+        if not response.choices:
+            raise HotelAgentError(
+                "Groq returned no chat response."
             )
 
-            result = response.choices[0].message.content
+        answer = response.choices[0].message.content
 
-            if result and result.strip():
-                return result.strip()
+        if not answer or not answer.strip():
+            raise HotelAgentError(
+                "Groq returned an empty chat response."
+            )
 
-            return None
+        return answer.strip()
 
-        except Exception as e:
+    except HotelAgentError:
+        raise
 
-            error = str(e)
+    except Exception as error:
+        print("CHAT ERROR:", repr(error))
 
-            print(f"Chat Error (Attempt {attempt + 1}):", error)
-
-            if (
-                "429" in error
-                or "rate_limit" in error.lower()
-                or "503" in error
-                or "timeout" in error.lower()
-            ):
-
-                if attempt < 2:
-                    time.sleep(4)
-                    continue
-
-            return None
-
-    return None
-
-
-# ============================================================
-# MAIN
-# ============================================================
-
-def main():
-
-    print("=" * 60)
-    print("AI HOTEL REVIEW AGENT")
-    print("=" * 60)
-
-    hotel_name = input("Enter hotel name: ").strip()
-
-    if not hotel_name:
-        print("Please enter a hotel name.")
-        return
-
-    search_results = search_hotel(hotel_name)
-
-    if not search_results:
-        print("Hotel search failed.")
-        return
-
-    hotel_information = extract_information(search_results)
-
-    if not hotel_information.strip():
-        print("No information found.")
-        return
-
-    analysis = analyze_hotel(
-        hotel_name,
-        hotel_information
-    )
-
-    if not analysis:
-        print("AI analysis failed.")
-        return
-
-    print("\nAI HOTEL REVIEW REPORT")
-    print("=" * 60)
-    print(analysis)
-
-    print("\nSOURCES")
-    print("=" * 60)
-
-    for i, result in enumerate(
-        search_results.get("results", [])
-    ):
-
-        print(f"{i + 1}. {result.get('title', 'Unknown')}")
-        print(result.get("url", ""))
-
-
-if __name__ == "__main__":
-    main()
+        raise HotelAgentError(
+            f"Chat response failed: {str(error)}"
+        ) from error
