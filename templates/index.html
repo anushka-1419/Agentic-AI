@@ -1,0 +1,1238 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>StayWise AI | Hotel Review Agent</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
+</head>
+
+
+<body>
+
+
+<!-- ================================================= -->
+<!-- NAVBAR -->
+<!-- ================================================= -->
+
+<nav class="navbar">
+
+    <div class="logo">
+
+        <span class="logo-star">✦</span>
+
+        <span>
+            StayWise
+            <span class="logo-ai">AI</span>
+        </span>
+
+    </div>
+
+
+    <div class="nav-status">
+
+        <span class="status-dot"></span>
+
+        AI-Powered Hotel Intelligence
+
+    </div>
+
+</nav>
+
+
+
+<!-- ================================================= -->
+<!-- HERO -->
+<!-- ================================================= -->
+
+<section class="hero">
+
+    <div class="hero-glow"></div>
+
+
+    <div class="hero-content">
+
+        <div class="badge">
+
+            <span>✦</span>
+
+            AI HOTEL REVIEW AGENT
+
+        </div>
+
+
+        <h1>
+
+            Make smarter
+
+            <span>hotel decisions.</span>
+
+        </h1>
+
+
+        <p>
+
+            Search guest experiences across the web and let AI
+            transform them into one clear, intelligent hotel report.
+
+        </p>
+
+
+        <!-- SEARCH -->
+
+        <div class="search-container">
+
+            <div class="search-icon">
+                🔍
+            </div>
+
+
+            <input
+                type="text"
+                id="hotelInput"
+                placeholder="Enter hotel name..."
+                autocomplete="off"
+            >
+
+
+            <button
+                id="analyzeButton"
+                onclick="analyzeHotel()"
+            >
+
+                Analyze Hotel
+
+                <span>→</span>
+
+            </button>
+
+        </div>
+
+
+        <div class="search-hint">
+
+            Try:
+            Taj Mahal Palace Mumbai ·
+            The Oberoi Delhi ·
+            Marriott Pune
+
+        </div>
+
+
+        <div class="hero-features">
+
+            <div>
+                ✦ Web Research
+            </div>
+
+            <div>
+                ✦ AI Analysis
+            </div>
+
+            <div>
+                ✓ Evidence Based
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ================================================= -->
+<!-- LOADING -->
+<!-- ================================================= -->
+
+<section
+    id="loadingSection"
+    class="loading-section hidden"
+>
+
+    <div class="loading-card">
+
+        <div class="loader"></div>
+
+        <h2>
+            Analyzing your hotel...
+        </h2>
+
+        <p id="loadingText">
+            Searching the web for guest experiences
+        </p>
+
+
+        <div class="progress">
+
+            <div
+                id="progressBar"
+                class="progress-bar"
+            ></div>
+
+        </div>
+
+
+        <div class="loading-steps">
+
+            <div
+                id="step1"
+                class="loading-step active"
+            >
+
+                <span>✓</span>
+
+                Web Research
+
+            </div>
+
+
+            <div
+                id="step2"
+                class="loading-step"
+            >
+
+                <span>2</span>
+
+                Review Analysis
+
+            </div>
+
+
+            <div
+                id="step3"
+                class="loading-step"
+            >
+
+                <span>3</span>
+
+                AI Report
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ================================================= -->
+<!-- ERROR -->
+<!-- ================================================= -->
+
+<div
+    id="errorBox"
+    class="error-box hidden"
+></div>
+
+
+
+<!-- ================================================= -->
+<!-- RESULTS -->
+<!-- ================================================= -->
+
+<main
+    id="resultsSection"
+    class="results hidden"
+>
+
+
+    <!-- HEADER -->
+
+    <div class="result-header">
+
+        <div>
+
+            <div class="result-label">
+
+                <span></span>
+
+                AI HOTEL ANALYSIS
+
+            </div>
+
+
+            <h2 id="hotelName">
+                Hotel Name
+            </h2>
+
+
+            <p>
+                Based on publicly available web information
+                and guest experiences.
+            </p>
+
+        </div>
+
+
+        <button
+            class="new-search"
+            onclick="newSearch()"
+        >
+
+            ＋ New Search
+
+        </button>
+
+    </div>
+
+
+
+    <!-- QUICK INFO -->
+
+    <div class="quick-info">
+
+        <div class="quick-item">
+
+            <div class="quick-icon">
+                ✦
+            </div>
+
+            <div>
+
+                <small>
+                    ANALYSIS
+                </small>
+
+                <strong>
+                    AI Generated
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="quick-line"></div>
+
+
+        <div class="quick-item">
+
+            <div class="quick-icon">
+                ◎
+            </div>
+
+            <div>
+
+                <small>
+                    RESEARCH
+                </small>
+
+                <strong>
+                    Web Based
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="quick-line"></div>
+
+
+        <div class="quick-item">
+
+            <div class="quick-icon">
+                ✓
+            </div>
+
+            <div>
+
+                <small>
+                    APPROACH
+                </small>
+
+                <strong>
+                    Evidence Based
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ================================================= -->
+    <!-- REPORT -->
+    <!-- ================================================= -->
+
+    <div class="report-card">
+
+
+        <div class="report-header">
+
+            <div class="report-icon">
+                ✦
+            </div>
+
+
+            <div>
+
+                <h3>
+                    AI Review Report
+                </h3>
+
+                <p>
+                    Intelligent analysis of guest experiences
+                </p>
+
+            </div>
+
+
+            <div class="ai-badge">
+                AI INSIGHT
+            </div>
+
+        </div>
+
+
+        <div
+            id="analysis"
+            class="analysis"
+        ></div>
+
+    </div>
+
+
+
+    <!-- ================================================= -->
+    <!-- SOURCES -->
+    <!-- ================================================= -->
+
+    <div class="sources-card">
+
+        <div class="sources-header">
+
+            <div>
+
+                <h3>
+                    Research Sources
+                </h3>
+
+                <p>
+                    Sources used to generate this analysis
+                </p>
+
+            </div>
+
+
+            <div class="source-count">
+
+                <span id="sourceCount">
+                    0
+                </span>
+
+                sources
+
+            </div>
+
+        </div>
+
+
+        <div
+            id="sources"
+            class="sources"
+        ></div>
+
+    </div>
+
+</main>
+
+
+
+<!-- ================================================= -->
+<!-- FOOTER -->
+<!-- ================================================= -->
+
+<footer>
+
+    <div>
+        ✦ StayWise AI
+    </div>
+
+    <p>
+        AI-powered hotel review intelligence
+    </p>
+
+    <div>
+        ● System Operational
+    </div>
+
+</footer>
+
+
+
+<!-- ================================================= -->
+<!-- JAVASCRIPT -->
+<!-- ================================================= -->
+
+<script>
+
+const hotelInput =
+    document.getElementById("hotelInput");
+
+const analyzeButton =
+    document.getElementById("analyzeButton");
+
+const loadingSection =
+    document.getElementById("loadingSection");
+
+const resultsSection =
+    document.getElementById("resultsSection");
+
+const errorBox =
+    document.getElementById("errorBox");
+
+const hotelName =
+    document.getElementById("hotelName");
+
+const analysis =
+    document.getElementById("analysis");
+
+const sources =
+    document.getElementById("sources");
+
+const sourceCount =
+    document.getElementById("sourceCount");
+
+const loadingText =
+    document.getElementById("loadingText");
+
+const progressBar =
+    document.getElementById("progressBar");
+
+const step1 =
+    document.getElementById("step1");
+
+const step2 =
+    document.getElementById("step2");
+
+const step3 =
+    document.getElementById("step3");
+
+
+
+/* ================================================= */
+/* ENTER KEY */
+/* ================================================= */
+
+hotelInput.addEventListener(
+    "keypress",
+    function(event) {
+
+        if (event.key === "Enter") {
+
+            analyzeHotel();
+
+        }
+
+    }
+);
+
+
+
+/* ================================================= */
+/* ANALYZE HOTEL */
+/* ================================================= */
+
+async function analyzeHotel() {
+
+    const hotel =
+        hotelInput.value.trim();
+
+
+    if (!hotel) {
+
+        showError(
+            "Please enter a hotel name."
+        );
+
+        return;
+
+    }
+
+
+    resultsSection.classList.add(
+        "hidden"
+    );
+
+    errorBox.classList.add(
+        "hidden"
+    );
+
+    loadingSection.classList.remove(
+        "hidden"
+    );
+
+
+    analyzeButton.disabled =
+        true;
+
+    analyzeButton.innerHTML =
+        "Analyzing...";
+
+
+    progressBar.style.width =
+        "20%";
+
+
+    step1.className =
+        "loading-step active";
+
+    step2.className =
+        "loading-step";
+
+    step3.className =
+        "loading-step";
+
+
+    loadingText.innerText =
+        "Searching the web for guest experiences";
+
+
+    const timer1 = setTimeout(() => {
+
+        loadingText.innerText =
+            "Collecting hotel reviews and information";
+
+        progressBar.style.width =
+            "50%";
+
+        step1.className =
+            "loading-step completed";
+
+        step2.className =
+            "loading-step active";
+
+    }, 3000);
+
+
+    const timer2 = setTimeout(() => {
+
+        loadingText.innerText =
+            "Gemini AI is analyzing the reviews";
+
+        progressBar.style.width =
+            "75%";
+
+        step2.className =
+            "loading-step completed";
+
+        step3.className =
+            "loading-step active";
+
+    }, 7000);
+
+
+    try {
+
+        const response =
+            await fetch(
+                "/analyze",
+                {
+
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        hotel_name: hotel
+                    })
+
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        clearTimeout(timer1);
+        clearTimeout(timer2);
+
+
+        if (!data.success) {
+
+            showError(
+                data.error ||
+                "Something went wrong."
+            );
+
+            return;
+
+        }
+
+
+        hotelName.innerText =
+            data.hotel;
+
+
+        analysis.innerHTML =
+            formatAnalysis(
+                data.analysis
+            );
+
+
+        displaySources(
+            data.sources
+        );
+
+
+        progressBar.style.width =
+            "100%";
+
+
+        step3.className =
+            "loading-step completed";
+
+
+        setTimeout(() => {
+
+            loadingSection.classList.add(
+                "hidden"
+            );
+
+            resultsSection.classList.remove(
+                "hidden"
+            );
+
+            resultsSection.scrollIntoView({
+                behavior: "smooth"
+            });
+
+        }, 300);
+
+
+    }
+
+
+    catch (error) {
+
+        console.error(error);
+
+        showError(
+            "Unable to connect to the server."
+        );
+
+    }
+
+
+    finally {
+
+        analyzeButton.disabled =
+            false;
+
+        analyzeButton.innerHTML =
+            'Analyze Hotel <span>→</span>';
+
+    }
+
+}
+
+
+
+/* ================================================= */
+/* ESCAPE HTML */
+/* ================================================= */
+
+function escapeHTML(text) {
+
+    return text
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+
+}
+
+
+
+/* ================================================= */
+/* FORMAT TEXT */
+/* ================================================= */
+
+function formatInline(text) {
+
+    text =
+        escapeHTML(text);
+
+
+    text =
+        text.replace(
+            /\*\*(.*?)\*\*/g,
+            "<strong>$1</strong>"
+        );
+
+
+    return text;
+
+}
+
+
+
+/* ================================================= */
+/* FORMAT AI REPORT */
+/* ================================================= */
+
+function formatAnalysis(text) {
+
+    if (!text) {
+
+        return `
+            <p class="no-data">
+                No analysis available.
+            </p>
+        `;
+
+    }
+
+
+    const lines =
+        text
+        .replace(/\r/g, "")
+        .split("\n");
+
+
+    let html = "";
+
+    let section = null;
+
+    let content = [];
+
+
+    function closeSection() {
+
+        if (!section) {
+            return;
+        }
+
+
+        html += `
+
+            <div class="report-section">
+
+                <div class="section-title">
+
+                    <span class="section-number">
+                        ${section.number}
+                    </span>
+
+                    <span>
+                        ${formatInline(
+                            section.title
+                        )}
+                    </span>
+
+                </div>
+
+
+                <div class="section-content">
+
+                    ${formatContent(
+                        content.join("\n")
+                    )}
+
+                </div>
+
+            </div>
+
+        `;
+
+
+        section = null;
+
+        content = [];
+
+    }
+
+
+    lines.forEach(line => {
+
+        const value =
+            line.trim();
+
+
+        if (!value) {
+            return;
+        }
+
+
+        if (
+            /^={3,}$/.test(value) ||
+            /^-{3,}$/.test(value)
+        ) {
+            return;
+        }
+
+
+        if (
+            value.includes(
+                "AI HOTEL REVIEW REPORT"
+            )
+        ) {
+            return;
+        }
+
+
+        if (
+            /^🏨\s*HOTEL\s*:/i.test(value)
+        ) {
+            return;
+        }
+
+
+        const match =
+            value.match(
+                /^(\d+)\.\s*(.+)$/
+            );
+
+
+        if (match) {
+
+            closeSection();
+
+
+            section = {
+
+                number:
+                    match[1],
+
+                title:
+                    match[2]
+
+            };
+
+            return;
+
+        }
+
+
+        if (section) {
+
+            content.push(
+                value
+            );
+
+        }
+
+    });
+
+
+    closeSection();
+
+
+    return html;
+
+}
+
+
+
+/* ================================================= */
+/* FORMAT SECTION CONTENT */
+/* ================================================= */
+
+function formatContent(text) {
+
+    const lines =
+        text.split("\n");
+
+
+    let html = "";
+
+    let listOpen = false;
+
+
+    lines.forEach(line => {
+
+        const value =
+            line.trim();
+
+
+        if (!value) {
+            return;
+        }
+
+
+        if (
+            /^[-•*]\s+/.test(value)
+        ) {
+
+            if (!listOpen) {
+
+                html +=
+                    "<ul class='report-list'>";
+
+                listOpen = true;
+
+            }
+
+
+            html += `
+
+                <li>
+                    ${formatInline(
+                        value.replace(
+                            /^[-•*]\s+/,
+                            ""
+                        )
+                    )}
+                </li>
+
+            `;
+
+            return;
+
+        }
+
+
+        if (listOpen) {
+
+            html += "</ul>";
+
+            listOpen = false;
+
+        }
+
+
+        if (
+            /^(Positive|Neutral|Negative)$/i
+            .test(value)
+        ) {
+
+            const type =
+                value.toLowerCase();
+
+
+            html += `
+
+                <span class="sentiment ${type}">
+                    ${value}
+                </span>
+
+            `;
+
+        }
+
+        else {
+
+            html += `
+
+                <p>
+                    ${formatInline(value)}
+                </p>
+
+            `;
+
+        }
+
+    });
+
+
+    if (listOpen) {
+
+        html += "</ul>";
+
+    }
+
+
+    return html;
+
+}
+
+
+
+/* ================================================= */
+/* SOURCES */
+/* ================================================= */
+
+function displaySources(sourceList) {
+
+    sources.innerHTML = "";
+
+
+    if (
+        !sourceList ||
+        sourceList.length === 0
+    ) {
+
+        sourceCount.innerText =
+            "0";
+
+
+        sources.innerHTML = `
+            <p class="no-sources">
+                No sources available.
+            </p>
+        `;
+
+        return;
+
+    }
+
+
+    sourceCount.innerText =
+        sourceList.length;
+
+
+    sourceList.forEach(
+        function(source, index) {
+
+            const item =
+                document.createElement(
+                    "a"
+                );
+
+
+            item.className =
+                "source-item";
+
+
+            item.href =
+                source.url;
+
+
+            item.target =
+                "_blank";
+
+
+            item.rel =
+                "noopener noreferrer";
+
+
+            item.innerHTML = `
+
+                <div class="source-number">
+                    ${String(
+                        index + 1
+                    ).padStart(2, "0")}
+                </div>
+
+
+                <div class="source-icon">
+                    ↗
+                </div>
+
+
+                <div class="source-info">
+
+                    <strong>
+                        ${escapeHTML(
+                            source.title ||
+                            "Research Source"
+                        )}
+                    </strong>
+
+                    <span>
+                        ${escapeHTML(
+                            source.url || ""
+                        )}
+                    </span>
+
+                </div>
+
+
+                <div class="source-arrow">
+                    →
+                </div>
+
+            `;
+
+
+            sources.appendChild(
+                item
+            );
+
+        }
+    );
+
+}
+
+
+
+/* ================================================= */
+/* ERROR */
+/* ================================================= */
+
+function showError(message) {
+
+    loadingSection.classList.add(
+        "hidden"
+    );
+
+
+    errorBox.innerText =
+        "⚠ " + message;
+
+
+    errorBox.classList.remove(
+        "hidden"
+    );
+
+
+    analyzeButton.disabled =
+        false;
+
+
+    analyzeButton.innerHTML =
+        'Analyze Hotel <span>→</span>';
+
+}
+
+
+
+/* ================================================= */
+/* NEW SEARCH */
+/* ================================================= */
+
+function newSearch() {
+
+    resultsSection.classList.add(
+        "hidden"
+    );
+
+
+    errorBox.classList.add(
+        "hidden"
+    );
+
+
+    hotelInput.value =
+        "";
+
+
+    hotelInput.focus();
+
+
+    window.scrollTo({
+
+        top: 0,
+
+        behavior: "smooth"
+
+    });
+
+}
+
+</script>
+
+</body>
+
+</html>
