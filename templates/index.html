@@ -893,50 +893,58 @@ function escapeAttribute(value) {
     return "#";
 }
         
+
 function displaySources(sources) {
     const container = document.getElementById("sourcesList");
 
     container.innerHTML = "";
 
     if (!sources || sources.length === 0) {
-        container.innerHTML = `
-            <p class="no-sources">
-                No research sources available.
-            </p>
-        `;
+        container.textContent = "No research sources available.";
         return;
     }
 
     sources.forEach((source, index) => {
         const item = document.createElement("div");
-
         item.className = "source-item";
 
-        const title = source.title || `Source ${index + 1}`;
-        const url = source.url || "#";
-        const content = source.content || "";
+        const number = document.createElement("div");
+        number.className = "source-number";
+        number.textContent = String(index + 1).padStart(2, "0");
 
-        item.innerHTML = `
-            <div class="source-number">
-                ${String(index + 1).padStart(2, "0")}
-            </div>
+        const info = document.createElement("div");
+        info.className = "source-info";
 
-            <div class="source-info">
-                <a
-                    href="${escapeAttribute(url)}"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    ${escapeHTML(title)}
-                </a>
+        const link = document.createElement("a");
+        link.textContent = source.title || `Source ${index + 1}`;
+        link.href = (
+            source.url &&
+            (
+                source.url.startsWith("https://") ||
+                source.url.startsWith("http://")
+            )
+        )
+            ? source.url
+            : "#";
 
-                <p>
-                    ${escapeHTML(content.substring(0, 180))}
-                </p>
-            </div>
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
 
-            <div class="source-arrow">↗</div>
-        `;
+        const description = document.createElement("p");
+        description.textContent = (
+            source.content || ""
+        ).substring(0, 180);
+
+        const arrow = document.createElement("div");
+        arrow.className = "source-arrow";
+        arrow.textContent = "↗";
+
+        info.appendChild(link);
+        info.appendChild(description);
+
+        item.appendChild(number);
+        item.appendChild(info);
+        item.appendChild(arrow);
 
         container.appendChild(item);
     });
