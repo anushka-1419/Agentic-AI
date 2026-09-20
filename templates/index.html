@@ -2,1367 +2,1327 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>StayWise AI | Hotel Review Intelligence</title>
-
-    <link rel="stylesheet"
-        href="{{ url_for('static', filename='style.css') }}">
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <title>StayWise AI | Hotel Review Agent</title>
 
     <link
-        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap"
-        rel="stylesheet">
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
 </head>
 
 <body>
 
-    <!-- ================= NAVBAR ================= -->
 
-    <nav class="navbar">
+<!-- ================================================= -->
+<!-- NAVBAR -->
+<!-- ================================================= -->
 
-        <div class="logo">
-            <span class="logo-star">✦</span>
-            <span>STAYWISE</span>
-            <span class="logo-ai">AI</span>
+<nav class="navbar">
+
+    <div class="logo">
+
+        <span class="logo-mark">S</span>
+
+        <span class="logo-text">
+            StayWise
+            <span>AI</span>
+        </span>
+
+    </div>
+
+
+    <div class="nav-links">
+
+        <a href="#home">Home</a>
+
+        <a href="#about">About</a>
+
+        <a href="#resultsSection">Analysis</a>
+
+        <button class="menu-button">☰</button>
+
+    </div>
+
+</nav>
+
+
+
+<!-- ================================================= -->
+<!-- HERO -->
+<!-- ================================================= -->
+
+<section class="hero" id="home">
+
+    <div class="hero-line"></div>
+
+    <div class="hero-content">
+
+
+        <div class="eyebrow">
+
+            <span></span>
+
+            AI HOTEL REVIEW INTELLIGENCE
+
+            <span></span>
+
         </div>
 
-        <div class="nav-status">
-            <span class="status-dot"></span>
-            AI SYSTEM ONLINE
+
+        <h1>
+
+            WELCOME TO
+
+            <strong>STAYWISE</strong>
+
+        </h1>
+
+
+        <p class="hero-tagline">
+
+            WHERE INTELLIGENCE MEETS HOSPITALITY
+
+        </p>
+
+
+        <p class="hero-description">
+
+            Discover what guests really think. StayWise AI researches
+            hotel reviews across the web and transforms them into one
+            clear, intelligent report.
+
+        </p>
+
+
+        <!-- SEARCH -->
+
+        <div class="search-container">
+
+            <div class="search-icon">
+                ⌕
+            </div>
+
+
+            <input
+                type="text"
+                id="hotelInput"
+                placeholder="Enter hotel name..."
+                autocomplete="off"
+            >
+
+
+            <button
+                id="analyzeButton"
+                onclick="analyzeHotel()"
+            >
+
+                ANALYZE
+
+                <span>→</span>
+
+            </button>
+
         </div>
 
-    </nav>
+
+        <div class="search-hint">
+
+            TRY: Taj Mahal Palace Mumbai · The Oberoi Delhi · Marriott Pune
+
+        </div>
 
 
-    <!-- ================= HERO ================= -->
+        <div class="hero-features">
 
-    <main>
+            <div>
+                WEB RESEARCH
+            </div>
 
-        <section class="hero">
+            <span>◆</span>
 
-            <div class="hero-glow"></div>
+            <div>
+                AI ANALYSIS
+            </div>
 
-            <div class="hero-content">
+            <span>◆</span>
 
-                <div class="badge">
-                    <span>✦</span>
-                    AI HOTEL INTELLIGENCE
-                </div>
+            <div>
+                EVIDENCE BASED
+            </div>
 
-                <h1>
-                    Know Before<br>
-                    <span>You Stay.</span>
-                </h1>
+        </div>
 
-                <p class="hero-description">
-                    Turn thousands of hotel reviews into one intelligent,
-                    easy-to-understand report.
-                </p>
+    </div>
 
-
-                <!-- SEARCH -->
-
-                <div class="search-container">
-
-                    <input
-                        type="text"
-                        id="hotelInput"
-                        placeholder="Enter hotel name..."
-                        autocomplete="off"
-                    >
-
-                    <button
-                        id="analyzeButton"
-                        onclick="analyzeHotel()"
-                    >
-                        <span>Analyze Hotel</span>
-                        <span class="button-arrow">→</span>
-                    </button>
-
-                </div>
-
-                <p class="search-hint">
-                    Example: Taj Mahal Palace Mumbai
-                </p>
+</section>
 
 
-                <!-- FEATURES -->
 
-                <div class="hero-features">
+<!-- ================================================= -->
+<!-- ABOUT STRIP -->
+<!-- ================================================= -->
 
-                    <div class="hero-feature">
-                        <span>✦</span>
-                        Web Research
-                    </div>
+<section class="about-strip" id="about">
 
-                    <div class="hero-feature">
-                        <span>✦</span>
-                        AI Analysis
-                    </div>
+    <div class="about-item">
 
-                    <div class="hero-feature">
-                        <span>✦</span>
-                        Guest Insights
-                    </div>
+        <span class="about-number">01</span>
 
-                </div>
+        <div>
+            <small>RESEARCH</small>
+            <strong>Web Intelligence</strong>
+        </div>
+
+    </div>
+
+
+    <div class="about-divider"></div>
+
+
+    <div class="about-item">
+
+        <span class="about-number">02</span>
+
+        <div>
+            <small>ANALYSIS</small>
+            <strong>AI-Powered Insights</strong>
+        </div>
+
+    </div>
+
+
+    <div class="about-divider"></div>
+
+
+    <div class="about-item">
+
+        <span class="about-number">03</span>
+
+        <div>
+            <small>RESULT</small>
+            <strong>Clear Hotel Report</strong>
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ================================================= -->
+<!-- LOADING -->
+<!-- ================================================= -->
+
+<section
+    id="loadingSection"
+    class="loading-section hidden"
+>
+
+    <div class="loading-card">
+
+        <div class="loading-symbol">
+            ✦
+        </div>
+
+        <div class="eyebrow">
+            PLEASE WAIT
+        </div>
+
+        <h2>
+            Preparing your
+            <em>hotel report</em>
+        </h2>
+
+        <p id="loadingText">
+            Searching the web for guest experiences
+        </p>
+
+
+        <div class="progress">
+
+            <div
+                id="progressBar"
+                class="progress-bar"
+            ></div>
+
+        </div>
+
+
+        <div class="loading-steps">
+
+            <div
+                id="step1"
+                class="loading-step active"
+            >
+
+                <span>01</span>
+
+                Web Research
 
             </div>
 
-        </section>
+
+            <div
+                id="step2"
+                class="loading-step"
+            >
+
+                <span>02</span>
+
+                Review Analysis
+
+            </div>
 
 
-        <!-- ================= LOADING ================= -->
+            <div
+                id="step3"
+                class="loading-step"
+            >
 
-        <section
-            id="loadingSection"
-            class="loading-section hidden"
+                <span>03</span>
+
+                AI Report
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ================================================= -->
+<!-- ERROR -->
+<!-- ================================================= -->
+
+<div
+    id="errorBox"
+    class="error-box hidden"
+></div>
+
+
+
+<!-- ================================================= -->
+<!-- RESULTS -->
+<!-- ================================================= -->
+
+<main
+    id="resultsSection"
+    class="results hidden"
+>
+
+
+    <!-- RESULT HEADER -->
+
+    <div class="result-header">
+
+        <div>
+
+            <div class="eyebrow left">
+
+                <span></span>
+
+                HOTEL INTELLIGENCE REPORT
+
+            </div>
+
+
+            <h2 id="hotelName">
+                Hotel Name
+            </h2>
+
+
+            <p>
+                An AI-generated analysis based on publicly available
+                web information and guest experiences.
+            </p>
+
+        </div>
+
+
+        <button
+            class="new-search"
+            onclick="newSearch()"
         >
 
-            <div class="loading-card">
+            + NEW SEARCH
 
-                <div class="loader"></div>
+        </button>
 
-                <h3>Analyzing Hotel Reviews</h3>
+    </div>
+
+
+
+    <!-- QUICK INFO -->
+
+    <div class="quick-info">
+
+        <div class="quick-item">
+
+            <span class="quick-number">
+                01
+            </span>
+
+            <div>
+
+                <small>
+                    ANALYSIS
+                </small>
+
+                <strong>
+                    AI Generated
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="quick-line"></div>
+
+
+        <div class="quick-item">
+
+            <span class="quick-number">
+                02
+            </span>
+
+            <div>
+
+                <small>
+                    RESEARCH
+                </small>
+
+                <strong>
+                    Web Based
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="quick-line"></div>
+
+
+        <div class="quick-item">
+
+            <span class="quick-number">
+                03
+            </span>
+
+            <div>
+
+                <small>
+                    APPROACH
+                </small>
+
+                <strong>
+                    Evidence Based
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ================================================= -->
+    <!-- REPORT -->
+    <!-- ================================================= -->
+
+    <div class="report-card">
+
+
+        <div class="report-header">
+
+            <div class="report-symbol">
+                ✦
+            </div>
+
+
+            <div>
+
+                <div class="small-label">
+                    STAYWISE AI
+                </div>
+
+                <h3>
+                    Hotel Review Report
+                </h3>
 
                 <p>
-                    Groq AI is analyzing the latest hotel information...
+                    Intelligent analysis of guest experiences
                 </p>
 
-                <div class="progress">
-                    <div
-                        id="progressBar"
-                        class="progress-bar"
-                    ></div>
-                </div>
-
-                <div class="loading-steps">
-
-                    <div id="step1" class="loading-step">
-                        <span>01</span>
-                        Searching hotel information
-                    </div>
-
-                    <div id="step2" class="loading-step">
-                        <span>02</span>
-                        Processing guest reviews
-                    </div>
-
-                    <div id="step3" class="loading-step">
-                        <span>03</span>
-                        Generating AI insights
-                    </div>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <!-- ================= ERROR ================= -->
-
-        <section
-            id="errorSection"
-            class="error-section hidden"
-        >
-
-            <div class="error-box">
-                <span>⚠</span>
-                <p id="errorMessage">
-                    Something went wrong.
-                </p>
-            </div>
-
-        </section>
-
-
-        <!-- ================= RESULTS ================= -->
-
-        <section
-            id="resultsSection"
-            class="results-section hidden"
-        >
-
-            <div class="result-header">
-
-                <div>
-                    <p class="result-label">
-                        AI HOTEL REPORT
-                    </p>
-
-                    <h2 id="resultHotel">
-                        Hotel Name
-                    </h2>
-                </div>
-
-                <button
-                    class="new-search-btn"
-                    onclick="resetSearch()"
-                >
-                    ← New Search
-                </button>
-
             </div>
 
 
-            <!-- QUICK INFO -->
-
-            <div class="quick-info">
-
-                <div class="quick-item">
-                    <div class="quick-icon">✦</div>
-                    <div>
-                        <div class="quick-line"></div>
-                        <span>Web researched</span>
-                    </div>
-                </div>
-
-                <div class="quick-item">
-                    <div class="quick-icon">AI</div>
-                    <div>
-                        <div class="quick-line"></div>
-                        <span>AI analyzed</span>
-                    </div>
-                </div>
-
-                <div class="quick-item">
-                    <div class="quick-icon">✓</div>
-                    <div>
-                        <div class="quick-line"></div>
-                        <span>Guest insights</span>
-                    </div>
-                </div>
-
+            <div class="ai-badge">
+                AI INSIGHT
             </div>
 
-
-            <!-- REPORT -->
-
-            <div class="report-card">
-
-                <div class="report-header">
-
-                    <div class="report-title-area">
-
-                        <div class="report-icon">
-                            ✦
-                        </div>
-
-                        <div>
-                            <h3>Hotel Intelligence Report</h3>
-                            <p>
-                                Generated using web research and AI analysis
-                            </p>
-                        </div>
-
-                    </div>
-
-                    <div class="ai-badge">
-                        GROQ AI
-                    </div>
-
-                </div>
-
-
-                <div
-                    id="analysisContent"
-                    class="analysis"
-                ></div>
-
-            </div>
-
-
-            <!-- ================= SOURCES ================= -->
-
-            <div class="sources-card">
-
-                <div class="sources-header">
-
-                    <div>
-                        <p class="result-label">
-                            RESEARCH SOURCES
-                        </p>
-
-                        <h3>
-                            Information used for analysis
-                        </h3>
-                    </div>
-
-                </div>
-
-                <div
-                    id="sourcesList"
-                    class="sources-list"
-                ></div>
-
-            </div>
-
-
-            <!-- ================= CHATBOT ================= -->
-
-            <div class="chatbot-card">
-
-                <div class="chatbot-header">
-
-                    <div class="chatbot-title">
-
-                        <div class="chatbot-icon">
-                            ✦
-                        </div>
-
-                        <div>
-                            <h3>StayWise AI Assistant</h3>
-
-                            <p>
-                                Ask anything about this hotel's reviews
-                            </p>
-                        </div>
-
-                    </div>
-
-                    <div class="chatbot-status">
-                        <span></span>
-                        ONLINE
-                    </div>
-
-                </div>
-
-
-                <!-- CHAT MESSAGES -->
-
-                <div
-                    id="chatMessages"
-                    class="chat-messages"
-                >
-
-                    <div class="chat-message bot-message">
-
-                        <div class="message-avatar">
-                            AI
-                        </div>
-
-                        <div class="message-content">
-                            Hi! I've analyzed this hotel's reviews.
-                            Ask me anything about the hotel, such as
-                            cleanliness, rooms, staff, food, complaints,
-                            location, or value for money.
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <!-- QUICK QUESTIONS -->
-
-                <div class="quick-questions">
-
-                    <button onclick="askQuickQuestion('What do guests like most about this hotel?')">
-                        What do guests like?
-                    </button>
-
-                    <button onclick="askQuickQuestion('What are the most common complaints?')">
-                        Common complaints?
-                    </button>
-
-                    <button onclick="askQuickQuestion('How is the staff and service?')">
-                        Staff & service?
-                    </button>
-
-                    <button onclick="askQuickQuestion('Is this hotel good for families?')">
-                        Good for families?
-                    </button>
-
-                </div>
-
-
-                <!-- CHAT INPUT -->
-
-                <div class="chat-input-area">
-
-                    <input
-                        type="text"
-                        id="chatInput"
-                        placeholder="Ask a question about this hotel..."
-                        autocomplete="off"
-                    >
-
-                    <button
-                        id="chatSendButton"
-                        onclick="sendChatMessage()"
-                    >
-                        →
-                    </button>
-
-                </div>
-
-            </div>
-
-        </section>
-
-    </main>
-
-
-    <!-- ================= FOOTER ================= -->
-
-    <footer>
-
-        <div class="footer-logo">
-            ✦ STAYWISE AI
         </div>
 
-        <p>
-            AI-powered hotel review intelligence
-        </p>
 
-        <p class="footer-copy">
-            © 2026 StayWise AI
-        </p>
+        <div
+            id="analysis"
+            class="analysis"
+        ></div>
 
-    </footer>
+    </div>
 
 
-    <!-- ================= JAVASCRIPT ================= -->
 
-    <script>
+    <!-- ================================================= -->
+    <!-- SOURCES -->
+    <!-- ================================================= -->
 
-        let currentHotel = "";
-        let currentAnalysis = "";
-        let currentSources = [];
+    <div class="sources-card">
 
+        <div class="sources-header">
 
-        // ==========================================
-        // ANALYZE HOTEL
-        // ==========================================
+            <div>
 
-        async function analyzeHotel() {
+                <div class="small-label">
+                    RESEARCH FOUNDATION
+                </div>
 
-            const input =
-                document.getElementById("hotelInput");
+                <h3>
+                    Sources & References
+                </h3>
 
-            const hotel =
-                input.value.trim();
+                <p>
+                    Web sources used to generate this analysis
+                </p>
 
-            if (!hotel) {
-
-                showError(
-                    "Please enter a hotel name."
-                );
-
-                return;
-            }
+            </div>
 
 
-            currentHotel = hotel;
+            <div class="source-count">
+
+                <span id="sourceCount">
+                    0
+                </span>
+
+                SOURCES
+
+            </div>
+
+        </div>
 
 
-            // UI
+        <div
+            id="sources"
+            class="sources"
+        ></div>
 
-            document
-                .getElementById("resultsSection")
-                .classList.add("hidden");
+    </div>
 
-            document
-                .getElementById("errorSection")
-                .classList.add("hidden");
-
-            document
-                .getElementById("loadingSection")
-                .classList.remove("hidden");
+</main>
 
 
-            updateLoadingStep(1);
+
+<!-- ================================================= -->
+<!-- FOOTER -->
+<!-- ================================================= -->
+
+<footer>
+
+    <div class="footer-brand">
+
+        <span class="logo-mark small">
+            S
+        </span>
+
+        <span>
+            StayWise AI
+        </span>
+
+    </div>
 
 
-            try {
-
-                const response = await fetch(
-                    "/analyze",
-                    {
-                        method: "POST",
-
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
-
-                        body: JSON.stringify({
-                            hotel_name: hotel
-                        })
-                    }
-                );
+    <p>
+        AI-POWERED HOTEL REVIEW INTELLIGENCE
+    </p>
 
 
-                const data = await response.json();
+    <div class="footer-status">
+
+        <span></span>
+
+        SYSTEM OPERATIONAL
+
+    </div>
+
+</footer>
 
 
-                if (!response.ok || !data.success) {
 
-                    throw new Error(
-                        data.error ||
-                        "Unable to analyze hotel."
-                    );
+<!-- ================================================= -->
+<!-- JAVASCRIPT -->
+<!-- ================================================= -->
+
+<script>
+
+const hotelInput =
+    document.getElementById("hotelInput");
+
+const analyzeButton =
+    document.getElementById("analyzeButton");
+
+const loadingSection =
+    document.getElementById("loadingSection");
+
+const resultsSection =
+    document.getElementById("resultsSection");
+
+const errorBox =
+    document.getElementById("errorBox");
+
+const hotelName =
+    document.getElementById("hotelName");
+
+const analysis =
+    document.getElementById("analysis");
+
+const sources =
+    document.getElementById("sources");
+
+const sourceCount =
+    document.getElementById("sourceCount");
+
+const loadingText =
+    document.getElementById("loadingText");
+
+const progressBar =
+    document.getElementById("progressBar");
+
+const step1 =
+    document.getElementById("step1");
+
+const step2 =
+    document.getElementById("step2");
+
+const step3 =
+    document.getElementById("step3");
+
+
+
+/* ================================================= */
+/* ENTER KEY */
+/* ================================================= */
+
+hotelInput.addEventListener(
+    "keypress",
+    function(event) {
+
+        if (event.key === "Enter") {
+
+            analyzeHotel();
+
+        }
+
+    }
+);
+
+
+
+/* ================================================= */
+/* ANALYZE HOTEL */
+/* ================================================= */
+
+async function analyzeHotel() {
+
+    const hotel =
+        hotelInput.value.trim();
+
+
+    if (!hotel) {
+
+        showError(
+            "Please enter a hotel name."
+        );
+
+        return;
+
+    }
+
+
+    resultsSection.classList.add(
+        "hidden"
+    );
+
+    errorBox.classList.add(
+        "hidden"
+    );
+
+    loadingSection.classList.remove(
+        "hidden"
+    );
+
+
+    analyzeButton.disabled =
+        true;
+
+    analyzeButton.innerHTML =
+        "ANALYZING...";
+
+
+    progressBar.style.width =
+        "20%";
+
+
+    step1.className =
+        "loading-step active";
+
+    step2.className =
+        "loading-step";
+
+    step3.className =
+        "loading-step";
+
+
+    loadingText.innerText =
+        "Searching the web for guest experiences";
+
+
+    const timer1 = setTimeout(() => {
+
+        loadingText.innerText =
+            "Collecting hotel reviews and information";
+
+        progressBar.style.width =
+            "50%";
+
+        step1.className =
+            "loading-step completed";
+
+        step2.className =
+            "loading-step active";
+
+    }, 3000);
+
+
+    const timer2 = setTimeout(() => {
+
+        loadingText.innerText =
+            "AI is analyzing the collected reviews";
+
+        progressBar.style.width =
+            "75%";
+
+        step2.className =
+            "loading-step completed";
+
+        step3.className =
+            "loading-step active";
+
+    }, 7000);
+
+
+    try {
+
+        const response =
+            await fetch(
+                "/analyze",
+                {
+
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        hotel_name: hotel
+                    })
 
                 }
+            );
 
 
-                currentAnalysis =
-                    data.analysis || "";
-
-                currentSources =
-                    data.sources || [];
+        const data =
+            await response.json();
 
 
-                updateLoadingStep(2);
+        clearTimeout(timer1);
+        clearTimeout(timer2);
 
 
-                await sleep(500);
+        if (!data.success) {
 
+            showError(
+                data.error ||
+                "Something went wrong."
+            );
 
-                updateLoadingStep(3);
-
-
-                await sleep(700);
-
-
-                displayResults(data);
-
-            }
-
-            catch (error) {
-
-                console.error(error);
-
-                document
-                    .getElementById("loadingSection")
-                    .classList.add("hidden");
-
-                showError(
-                    error.message ||
-                    "Unable to search for hotel information."
-                );
-
-            }
+            return;
 
         }
 
 
-        // ==========================================
-        // DISPLAY RESULTS
-        // ==========================================
-
-        function displayResults(data) {
-
-            document
-                .getElementById("loadingSection")
-                .classList.add("hidden");
+        hotelName.innerText =
+            data.hotel;
 
 
-            document
-                .getElementById("resultsSection")
-                .classList.remove("hidden");
-
-
-            document
-                .getElementById("resultHotel")
-                .textContent =
-                data.hotel || currentHotel;
-
-
+        analysis.innerHTML =
             formatAnalysis(
-                data.analysis || ""
+                data.analysis
             );
 
 
-            displaySources(
-                data.sources || []
-            );
+        displaySources(
+            data.sources
+        );
 
 
-            // Reset chatbot
+        progressBar.style.width =
+            "100%";
 
-            document
-                .getElementById("chatMessages")
-                .innerHTML = `
 
-                    <div class="chat-message bot-message">
+        step3.className =
+            "loading-step completed";
 
-                        <div class="message-avatar">
-                            AI
-                        </div>
 
-                        <div class="message-content">
-                            Hi! I've analyzed this hotel's reviews.
-                            Ask me anything about the hotel.
-                        </div>
+        setTimeout(() => {
 
-                    </div>
-
-                `;
-
-
-            window.scrollTo({
-                top: document
-                    .getElementById("resultsSection")
-                    .offsetTop - 40,
-                behavior: "smooth"
-            });
-
-        }
-
-
-        // ==========================================
-        // FORMAT AI ANALYSIS
-        // ==========================================
-
-        function formatAnalysis(text) {
-
-            const container =
-                document.getElementById(
-                    "analysisContent"
-                );
-
-            container.innerHTML = "";
-
-
-            const lines =
-                text.split("\n");
-
-
-            let currentSection = null;
-
-
-            lines.forEach(line => {
-
-                line = line.trim();
-
-
-                if (!line) {
-                    return;
-                }
-
-
-                // Remove decorative lines
-
-                if (
-                    line === "===" ||
-                    line === "---" ||
-                    line === "___"
-                ) {
-                    return;
-                }
-
-
-                // Numbered heading
-
-                const headingMatch =
-                    line.match(
-                        /^(\d+)\.\s*(.+)$/
-                    );
-
-
-                if (headingMatch) {
-
-                    currentSection =
-                        document.createElement("div");
-
-                    currentSection.className =
-                        "report-section";
-
-
-                    const title =
-                        document.createElement("div");
-
-                    title.className =
-                        "section-title";
-
-
-                    title.innerHTML = `
-
-                        <span class="section-number">
-                            ${headingMatch[1]}
-                        </span>
-
-                        <span>
-                            ${escapeHTML(
-                                headingMatch[2]
-                            )}
-                        </span>
-
-                    `;
-
-
-                    const content =
-                        document.createElement("div");
-
-                    content.className =
-                        "section-content";
-
-
-                    currentSection.appendChild(
-                        title
-                    );
-
-                    currentSection.appendChild(
-                        content
-                    );
-
-
-                    container.appendChild(
-                        currentSection
-                    );
-
-
-                    return;
-                }
-
-
-                if (!currentSection) {
-                    return;
-                }
-
-
-                const content =
-                    currentSection.querySelector(
-                        ".section-content"
-                    );
-
-
-                // Bullet point
-
-                if (
-                    line.startsWith("-") ||
-                    line.startsWith("•") ||
-                    line.startsWith("*")
-                ) {
-
-                    let bullet =
-                        line.substring(1).trim();
-
-
-                    let list =
-                        content.querySelector(
-                            ".report-list"
-                        );
-
-
-                    if (!list) {
-
-                        list =
-                            document.createElement(
-                                "ul"
-                            );
-
-                        list.className =
-                            "report-list";
-
-                        content.appendChild(
-                            list
-                        );
-
-                    }
-
-
-                    const li =
-                        document.createElement("li");
-
-                    li.innerHTML =
-                        escapeHTML(bullet);
-
-                    list.appendChild(li);
-
-                }
-
-                else {
-
-                    const p =
-                        document.createElement("p");
-
-                    p.innerHTML =
-                        escapeHTML(line);
-
-                    content.appendChild(p);
-
-                }
-
-            });
-
-        }
-
-
-        // ==========================================
-        // SOURCES
-        // ==========================================
-
-        function displaySources(sources) {
-
-            const container =
-                document.getElementById(
-                    "sourcesList"
-                );
-
-            container.innerHTML = "";
-
-
-            if (!sources || sources.length === 0) {
-
-                container.innerHTML =
-                    `<p class="no-sources">
-                        No research sources available.
-                    </p>`;
-
-                return;
-            }
-
-
-            sources.forEach(
-                (source, index) => {
-
-                    const item =
-                        document.createElement("div");
-
-                    item.className =
-                        "source-item";
-
-
-                    const title =
-                        source.title ||
-                        `Source ${index + 1}`;
-
-
-                    const url =
-                        source.url || "#";
-
-
-                    const content =
-                        source.content || "";
-
-
-                    item.innerHTML = `
-
-                        <div class="source-number">
-                            ${index + 1}
-                        </div>
-
-                        <div class="source-info">
-
-                            
-                                href="${escapeAttribute(url)}"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                ${escapeHTML(title)}
-                            </a>
-
-                            <p>
-                                ${escapeHTML(
-                                    content.substring(
-                                        0,
-                                        180
-                                    )
-                                )}
-                            </p>
-
-                        </div>
-
-                    `;
-
-
-                    container.appendChild(item);
-
-                }
-            );
-
-        }
-
-
-        // ==========================================
-        // CHATBOT
-        // ==========================================
-
-        async function sendChatMessage() {
-
-            const input =
-                document.getElementById(
-                    "chatInput"
-                );
-
-            const message =
-                input.value.trim();
-
-
-            if (!message) {
-                return;
-            }
-
-
-            if (!currentHotel) {
-
-                addChatMessage(
-                    "bot",
-                    "Please analyze a hotel first."
-                );
-
-                return;
-            }
-
-
-            addChatMessage(
-                "user",
-                message
-            );
-
-
-            input.value = "";
-
-
-            const sendButton =
-                document.getElementById(
-                    "chatSendButton"
-                );
-
-            sendButton.disabled = true;
-
-            sendButton.textContent = "…";
-
-
-            const typingId =
-                addTypingMessage();
-
-
-            try {
-
-                const response =
-                    await fetch(
-                        "/chat",
-                        {
-                            method: "POST",
-
-                            headers: {
-                                "Content-Type":
-                                    "application/json"
-                            },
-
-                            body: JSON.stringify({
-
-                                hotel_name:
-                                    currentHotel,
-
-                                question:
-                                    message,
-
-                                analysis:
-                                    currentAnalysis,
-
-                                sources:
-                                    currentSources
-
-                            })
-
-                        }
-                    );
-
-
-                const data =
-                    await response.json();
-
-
-                removeTypingMessage(
-                    typingId
-                );
-
-
-                if (
-                    !response.ok ||
-                    !data.success
-                ) {
-
-                    throw new Error(
-                        data.error ||
-                        "Unable to get AI response."
-                    );
-
-                }
-
-
-                addChatMessage(
-                    "bot",
-                    data.answer
-                );
-
-            }
-
-            catch (error) {
-
-                removeTypingMessage(
-                    typingId
-                );
-
-                addChatMessage(
-                    "bot",
-                    "Sorry, I couldn't answer that right now. Please try again."
-                );
-
-                console.error(error);
-
-            }
-
-
-            sendButton.disabled = false;
-
-            sendButton.textContent = "→";
-
-        }
-
-
-        // ==========================================
-        // QUICK CHAT QUESTIONS
-        // ==========================================
-
-        function askQuickQuestion(question) {
-
-            document
-                .getElementById("chatInput")
-                .value = question;
-
-            sendChatMessage();
-
-        }
-
-
-        // ==========================================
-        // ADD CHAT MESSAGE
-        // ==========================================
-
-        function addChatMessage(
-            type,
-            message
-        ) {
-
-            const container =
-                document.getElementById(
-                    "chatMessages"
-                );
-
-
-            const wrapper =
-                document.createElement("div");
-
-
-            wrapper.className =
-                type === "user"
-                    ? "chat-message user-message"
-                    : "chat-message bot-message";
-
-
-            const avatar =
-                type === "user"
-                    ? "YOU"
-                    : "AI";
-
-
-            wrapper.innerHTML = `
-
-                <div class="message-avatar">
-                    ${avatar}
-                </div>
-
-                <div class="message-content">
-                    ${formatChatText(message)}
-                </div>
-
-            `;
-
-
-            container.appendChild(
-                wrapper
-            );
-
-
-            container.scrollTop =
-                container.scrollHeight;
-
-        }
-
-
-        // ==========================================
-        // TYPING INDICATOR
-        // ==========================================
-
-        function addTypingMessage() {
-
-            const container =
-                document.getElementById(
-                    "chatMessages"
-                );
-
-
-            const id =
-                "typing-" +
-                Date.now();
-
-
-            const wrapper =
-                document.createElement("div");
-
-
-            wrapper.id = id;
-
-            wrapper.className =
-                "chat-message bot-message";
-
-
-            wrapper.innerHTML = `
-
-                <div class="message-avatar">
-                    AI
-                </div>
-
-                <div class="message-content typing">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </div>
-
-            `;
-
-
-            container.appendChild(
-                wrapper
-            );
-
-
-            container.scrollTop =
-                container.scrollHeight;
-
-
-            return id;
-
-        }
-
-
-        function removeTypingMessage(id) {
-
-            const element =
-                document.getElementById(id);
-
-            if (element) {
-                element.remove();
-            }
-
-        }
-
-
-        // ==========================================
-        // ENTER KEY
-        // ==========================================
-
-        document
-            .getElementById("hotelInput")
-            .addEventListener(
-                "keydown",
-                function(event) {
-
-                    if (
-                        event.key === "Enter"
-                    ) {
-
-                        analyzeHotel();
-
-                    }
-
-                }
-            );
-
-
-        document
-            .getElementById("chatInput")
-            .addEventListener(
-                "keydown",
-                function(event) {
-
-                    if (
-                        event.key === "Enter"
-                    ) {
-
-                        sendChatMessage();
-
-                    }
-
-                }
-            );
-
-
-        // ==========================================
-        // LOADING
-        // ==========================================
-
-        function updateLoadingStep(step) {
-
-            for (
-                let i = 1;
-                i <= 3;
-                i++
-            ) {
-
-                const element =
-                    document.getElementById(
-                        "step" + i
-                    );
-
-
-                if (i <= step) {
-
-                    element.classList.add(
-                        "active"
-                    );
-
-                }
-
-            }
-
-
-            document
-                .getElementById("progressBar")
-                .style.width =
-                (step / 3 * 100) + "%";
-
-        }
-
-
-        // ==========================================
-        // RESET
-        // ==========================================
-
-        function resetSearch() {
-
-            document
-                .getElementById("resultsSection")
-                .classList.add("hidden");
-
-            document
-                .getElementById("errorSection")
-                .classList.add("hidden");
-
-            document
-                .getElementById("hotelInput")
-                .value = "";
-
-            currentHotel = "";
-            currentAnalysis = "";
-            currentSources = [];
-
-
-            window.scrollTo({
-                top: 0,
-                behavior: "smooth"
-            });
-
-        }
-
-
-        // ==========================================
-        // ERROR
-        // ==========================================
-
-        function showError(message) {
-
-            const section =
-                document.getElementById(
-                    "errorSection"
-                );
-
-
-            document
-                .getElementById("errorMessage")
-                .textContent = message;
-
-
-            section.classList.remove(
+            loadingSection.classList.add(
                 "hidden"
             );
 
+            resultsSection.classList.remove(
+                "hidden"
+            );
+
+            resultsSection.scrollIntoView({
+                behavior: "smooth"
+            });
+
+        }, 300);
+
+
+    }
+
+
+    catch (error) {
+
+        console.error(error);
+
+        showError(
+            "Unable to connect to the server."
+        );
+
+    }
+
+
+    finally {
+
+        analyzeButton.disabled =
+            false;
+
+        analyzeButton.innerHTML =
+            'ANALYZE <span>→</span>';
+
+    }
+
+}
+
+
+
+/* ================================================= */
+/* ESCAPE HTML */
+/* ================================================= */
+
+function escapeHTML(text) {
+
+    return text
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+
+}
+
+
+
+/* ================================================= */
+/* FORMAT INLINE */
+/* ================================================= */
+
+function formatInline(text) {
+
+    text =
+        escapeHTML(text);
+
+
+    text =
+        text.replace(
+            /\*\*(.*?)\*\*/g,
+            "<strong>$1</strong>"
+        );
+
+
+    return text;
+
+}
+
+
+
+/* ================================================= */
+/* FORMAT AI REPORT */
+/* ================================================= */
+
+function formatAnalysis(text) {
+
+    if (!text) {
+
+        return `
+            <p class="no-data">
+                No analysis available.
+            </p>
+        `;
+
+    }
+
+
+    const lines =
+        text
+        .replace(/\r/g, "")
+        .split("\n");
+
+
+    let html = "";
+
+    let section = null;
+
+    let content = [];
+
+
+    function closeSection() {
+
+        if (!section) {
+            return;
         }
 
 
-        // ==========================================
-        // HELPERS
-        // ==========================================
+        html += `
 
-        function sleep(ms) {
+            <div class="report-section">
 
-            return new Promise(
-                resolve =>
-                    setTimeout(
-                        resolve,
-                        ms
-                    )
+                <div class="section-title">
+
+                    <span class="section-number">
+                        ${section.number}
+                    </span>
+
+                    <span>
+                        ${formatInline(
+                            section.title
+                        )}
+                    </span>
+
+                </div>
+
+
+                <div class="section-content">
+
+                    ${formatContent(
+                        content.join("\n")
+                    )}
+
+                </div>
+
+            </div>
+
+        `;
+
+
+        section = null;
+
+        content = [];
+
+    }
+
+
+    lines.forEach(line => {
+
+        const value =
+            line.trim();
+
+
+        if (!value) {
+            return;
+        }
+
+
+        if (
+            /^={3,}$/.test(value) ||
+            /^-{3,}$/.test(value)
+        ) {
+            return;
+        }
+
+
+        if (
+            value.includes(
+                "AI HOTEL REVIEW REPORT"
+            )
+        ) {
+            return;
+        }
+
+
+        if (
+            /^🏨\s*HOTEL\s*:/i.test(value)
+        ) {
+            return;
+        }
+
+
+        const match =
+            value.match(
+                /^(\d+)\.\s*(.+)$/
+            );
+
+
+        if (match) {
+
+            closeSection();
+
+
+            section = {
+
+                number:
+                    match[1],
+
+                title:
+                    match[2]
+
+            };
+
+            return;
+
+        }
+
+
+        if (section) {
+
+            content.push(
+                value
             );
 
         }
 
+    });
 
-        function escapeHTML(text) {
 
-            return String(text)
-                .replace(
-                    /&/g,
-                    "&amp;"
-                )
-                .replace(
-                    /</g,
-                    "&lt;"
-                )
-                .replace(
-                    />/g,
-                    "&gt;"
-                )
-                .replace(
-                    /"/g,
-                    "&quot;"
-                )
-                .replace(
-                    /'/g,
-                    "&#039;"
-                );
+    closeSection();
+
+
+    return html;
+
+}
+
+
+
+/* ================================================= */
+/* FORMAT CONTENT */
+/* ================================================= */
+
+function formatContent(text) {
+
+    const lines =
+        text.split("\n");
+
+
+    let html = "";
+
+    let listOpen = false;
+
+
+    lines.forEach(line => {
+
+        const value =
+            line.trim();
+
+
+        if (!value) {
+            return;
+        }
+
+
+        if (
+            /^[-•*]\s+/.test(value)
+        ) {
+
+            if (!listOpen) {
+
+                html +=
+                    "<ul class='report-list'>";
+
+                listOpen = true;
+
+            }
+
+
+            html += `
+
+                <li>
+                    ${formatInline(
+                        value.replace(
+                            /^[-•*]\s+/,
+                            ""
+                        )
+                    )}
+                </li>
+
+            `;
+
+            return;
 
         }
 
 
-        function escapeAttribute(text) {
+        if (listOpen) {
 
-            return String(text)
-                .replace(
-                    /"/g,
-                    "&quot;"
-                )
-                .replace(
-                    /</g,
-                    "&lt;"
-                )
-                .replace(
-                    />/g,
-                    "&gt;"
-                );
+            html += "</ul>";
+
+            listOpen = false;
 
         }
 
 
-        function formatChatText(text) {
+        if (
+            /^(Positive|Neutral|Negative)$/i
+            .test(value)
+        ) {
 
-            return escapeHTML(text)
-                .replace(
-                    /\n/g,
-                    "<br>"
-                );
+            const type =
+                value.toLowerCase();
+
+
+            html += `
+
+                <span class="sentiment ${type}">
+                    ${value}
+                </span>
+
+            `;
 
         }
 
-    </script>
+        else {
+
+            html += `
+
+                <p>
+                    ${formatInline(value)}
+                </p>
+
+            `;
+
+        }
+
+    });
+
+
+    if (listOpen) {
+
+        html += "</ul>";
+
+    }
+
+
+    return html;
+
+}
+
+
+
+/* ================================================= */
+/* SOURCES */
+/* ================================================= */
+
+function displaySources(sourceList) {
+
+    sources.innerHTML = "";
+
+
+    if (
+        !sourceList ||
+        sourceList.length === 0
+    ) {
+
+        sourceCount.innerText =
+            "0";
+
+
+        sources.innerHTML = `
+            <p class="no-sources">
+                No sources available.
+            </p>
+        `;
+
+        return;
+
+    }
+
+
+    sourceCount.innerText =
+        sourceList.length;
+
+
+    sourceList.forEach(
+        function(source, index) {
+
+            const item =
+                document.createElement(
+                    "a"
+                );
+
+
+            item.className =
+                "source-item";
+
+
+            item.href =
+                source.url;
+
+
+            item.target =
+                "_blank";
+
+
+            item.rel =
+                "noopener noreferrer";
+
+
+            item.innerHTML = `
+
+                <div class="source-number">
+                    ${String(
+                        index + 1
+                    ).padStart(2, "0")}
+                </div>
+
+
+                <div class="source-icon">
+                    ↗
+                </div>
+
+
+                <div class="source-info">
+
+                    <strong>
+                        ${escapeHTML(
+                            source.title ||
+                            "Research Source"
+                        )}
+                    </strong>
+
+                    <span>
+                        ${escapeHTML(
+                            source.url || ""
+                        )}
+                    </span>
+
+                </div>
+
+
+                <div class="source-arrow">
+                    →
+                </div>
+
+            `;
+
+
+            sources.appendChild(
+                item
+            );
+
+        }
+    );
+
+}
+
+
+
+/* ================================================= */
+/* ERROR */
+/* ================================================= */
+
+function showError(message) {
+
+    loadingSection.classList.add(
+        "hidden"
+    );
+
+
+    errorBox.innerText =
+        "⚠ " + message;
+
+
+    errorBox.classList.remove(
+        "hidden"
+    );
+
+
+    analyzeButton.disabled =
+        false;
+
+
+    analyzeButton.innerHTML =
+        'ANALYZE <span>→</span>';
+
+}
+
+
+
+/* ================================================= */
+/* NEW SEARCH */
+/* ================================================= */
+
+function newSearch() {
+
+    resultsSection.classList.add(
+        "hidden"
+    );
+
+
+    errorBox.classList.add(
+        "hidden"
+    );
+
+
+    hotelInput.value =
+        "";
+
+
+    hotelInput.focus();
+
+
+    window.scrollTo({
+
+        top: 0,
+
+        behavior: "smooth"
+
+    });
+
+}
+
+</script>
 
 </body>
 
