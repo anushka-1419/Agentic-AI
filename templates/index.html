@@ -869,90 +869,55 @@
         // DISPLAY SOURCES
         // ==========================================
 
-        function displaySources(sources) {
+        
+function displaySources(sources) {
+    const container = document.getElementById("sourcesList");
 
-            const container =
-                document.getElementById("sourcesList");
+    container.innerHTML = "";
 
-            container.innerHTML = "";
+    if (!sources || sources.length === 0) {
+        container.innerHTML = `
+            <p class="no-sources">
+                No research sources available.
+            </p>
+        `;
+        return;
+    }
 
+    sources.forEach((source, index) => {
+        const item = document.createElement("div");
 
-            if (!sources || sources.length === 0) {
+        item.className = "source-item";
 
-                container.innerHTML =
-                    `<p class="no-sources">
-                        No research sources available.
-                    </p>`;
+        const title = source.title || `Source ${index + 1}`;
+        const url = source.url || "#";
+        const content = source.content || "";
 
-                return;
+        item.innerHTML = `
+            <div class="source-number">
+                ${String(index + 1).padStart(2, "0")}
+            </div>
 
-            }
+            <div class="source-info">
+                <a
+                    href="${escapeAttribute(url)}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    ${escapeHTML(title)}
+                </a>
 
+                <p>
+                    ${escapeHTML(content.substring(0, 180))}
+                </p>
+            </div>
 
-            sources.forEach(function (source, index) {
+            <div class="source-arrow">↗</div>
+        `;
 
-                const item =
-                    document.createElement("div");
-
-                item.className =
-                    "source-item";
-
-
-                const number =
-                    document.createElement("div");
-
-                number.className =
-                    "source-number";
-
-                number.textContent =
-                    index + 1;
-
-
-                const info =
-                    document.createElement("div");
-
-                info.className =
-                    "source-info";
-
-
-                const link =
-                    document.createElement("a");
-
-                link.href =
-                    source.url || "#";
-
-                link.target = "_blank";
-
-                link.rel =
-                    "noopener noreferrer";
-
-                link.textContent =
-                    source.title ||
-                    `Source ${index + 1}`;
-
-
-                const description =
-                    document.createElement("p");
-
-                description.textContent =
-                    source.content
-                        ? source.content.substring(0, 180)
-                        : "Research source used for hotel analysis.";
-
-
-                info.appendChild(link);
-
-                info.appendChild(description);
-
-                item.appendChild(number);
-
-                item.appendChild(info);
-
-                container.appendChild(item);
-
-            });
-
-        }
+        container.appendChild(item);
+    });
+}
 
 
         // ==========================================
