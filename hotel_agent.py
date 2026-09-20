@@ -1,13 +1,13 @@
 from tavily import TavilyClient
-from google import genai
+from groq import Groq
 import time
 
 # ============================================================
 # API KEYS
 # ============================================================
 
-TAVILY_API_KEY = "YOUR_TAVILY_API_KEY"
-GEMINI_API_KEY = "YOUR_GEMINI_API_KEY"
+TAVILY_API_KEY = "PASTE_YOUR_TAVILY_API_KEY_HERE"
+GROQ_API_KEY = "PASTE_YOUR_GROQ_API_KEY_HERE"
 
 
 # ============================================================
@@ -18,8 +18,8 @@ tavily = TavilyClient(
     api_key=TAVILY_API_KEY
 )
 
-gemini = genai.Client(
-    api_key=GEMINI_API_KEY
+groq = Groq(
+    api_key=GROQ_API_KEY
 )
 
 
@@ -135,12 +135,12 @@ URL:
 
 
 # ============================================================
-# GEMINI ANALYSIS
+# GROQ ANALYSIS
 # ============================================================
 
 def analyze_hotel(hotel_name, hotel_information):
 
-    print("🤖 Gemini is analyzing the hotel...")
+    print("🤖 Groq is analyzing the hotel...")
     print("Please wait...\n")
 
     prompt = f"""
@@ -222,21 +222,45 @@ RULES:
 
         try:
 
-            response = gemini.models.generate_content(
-                model="gemini-3.6-flash",
-                contents=prompt
+            response = groq.chat.completions.create(
+
+                model="openai/gpt-oss-120b",
+
+                messages=[
+                    {
+                        "role": "system",
+                        "content": (
+                            "You are a professional hotel review "
+                            "analyst. Follow the instructions "
+                            "strictly and do not invent information."
+                        )
+                    },
+                    {
+                        "role": "user",
+                        "content": prompt
+                    }
+                ],
+
+                temperature=0.3,
+
+                max_tokens=4000
             )
 
-            return response.text
+            return response.choices[0].message.content
 
         except Exception as e:
 
             error = str(e)
 
-            if "503" in error or "UNAVAILABLE" in error:
+            if (
+                "429" in error
+                or "rate_limit" in error.lower()
+                or "503" in error
+                or "timeout" in error.lower()
+            ):
 
                 print(
-                    f"⚠️ Gemini temporarily busy. "
+                    f"⚠️ Groq temporarily unavailable. "
                     f"Retrying... ({attempt + 1}/3)"
                 )
 
@@ -244,13 +268,13 @@ RULES:
 
             else:
 
-                print("\n❌ Gemini Error:")
+                print("\n❌ Groq Error:")
                 print(e)
 
                 return None
 
 
-    print("\n❌ Gemini is currently unavailable.")
+    print("\n❌ Groq is currently unavailable.")
 
     return None
 
@@ -269,7 +293,7 @@ def main():
     print(
         "\nThis AI Agent uses:"
         "\n🔎 Tavily → Web Research"
-        "\n🤖 Gemini → Review Analysis"
+        "\n🤖 Groq → Review Analysis"
     )
 
     print("\n" + "=" * 60)
@@ -370,6 +394,10 @@ def main():
     print("✅ Hotel analysis completed!")
     print("=" * 60)
 
+
+# ============================================================
+# RUN
+# ============================================================
 
 if __name__ == "__main__":
     main()
