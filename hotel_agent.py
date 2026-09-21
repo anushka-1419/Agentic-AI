@@ -268,52 +268,66 @@ Rules:
 # CHAT ASSISTANT
 # ============================================================
 
+
+# ============================================================
+# CHATBOT — HOTEL QUESTIONS
+# ============================================================
+
 def chat_about_hotel(
     hotel_name,
     question,
     analysis="",
     sources=None
 ):
-    validate_clients()
-
     sources = sources or []
 
-    source_text = "\n".join(
-        f"{source.get('title', '')}: {source.get('url', '')}"
-        for source in sources
-    )
+    source_text = ""
+
+    for index, source in enumerate(sources):
+        source_text += f"""
+SOURCE {index + 1}
+TITLE: {source.get("title", "")}
+CONTENT: {source.get("content", "")}
+URL: {source.get("url", "")}
+"""
 
     prompt = f"""
-You are StayWise AI, a hotel review assistant.
+You are StayWise AI, a helpful hotel review assistant.
 
-Hotel:
+HOTEL NAME:
 {hotel_name}
 
-Existing AI report:
+GENERATED HOTEL REPORT:
 {analysis}
 
-Research sources:
+RESEARCH SOURCES:
 {source_text}
 
-User question:
+USER QUESTION:
 {question}
 
-Answer using only the available report and research.
-If the information is unavailable, clearly say:
-"Not enough information."
-
-Keep the answer concise and useful.
+INSTRUCTIONS:
+1. Answer the user's question directly and clearly.
+2. Use the generated hotel report and research sources.
+3. The report may contain information that directly answers
+   the question, so use it.
+4. Do not invent facts, timings, prices, or facilities.
+5. If the information is genuinely unavailable, say:
+   "I couldn't find this information in the available research."
+6. Keep the answer concise but helpful.
+7. Do not repeat the entire hotel report.
 """
 
     try:
         response = groq.chat.completions.create(
-            model=GROQ_MODEL,
+            model="openai/gpt-oss-120b",
             messages=[
                 {
                     "role": "system",
                     "content": (
-                        "You are a helpful and evidence-based "
-                        "hotel review assistant."
+                        "You are a helpful hotel information "
+                        "assistant. Answer using the supplied "
+                        "hotel report and research."
                     )
                 },
                 {
@@ -321,30 +335,17 @@ Keep the answer concise and useful.
                     "content": prompt
                 }
             ],
-            temperature=0.2,
-            max_tokens=1200
+            temperature=0.3,
+            max_tokens=700
         )
-
-        if not response.choices:
-            raise HotelAgentError(
-                "Groq returned no chat response."
-            )
 
         answer = response.choices[0].message.content
 
         if not answer or not answer.strip():
-            raise HotelAgentError(
-                "Groq returned an empty chat response."
-            )
+            return "I couldn't generate an answer right now."
 
         return answer.strip()
 
-    except HotelAgentError:
-        raise
-
     except Exception as error:
-        print("CHAT ERROR:", repr(error))
-
-        raise HotelAgentError(
-            f"Chat response failed: {str(error)}"
-        ) from error
+        print("CHATBOT GROQ ERROR:", error)
+        raise
