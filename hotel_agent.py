@@ -273,6 +273,11 @@ Rules:
 # CHATBOT — HOTEL QUESTIONS
 # ============================================================
 
+
+# ============================================================
+# CHATBOT
+# ============================================================
+
 def chat_about_hotel(
     hotel_name,
     question,
@@ -307,39 +312,33 @@ USER QUESTION:
 {question}
 
 INSTRUCTIONS:
-1. Answer the user's question directly and clearly.
-2. Use the generated hotel report and research sources.
-3. The report may contain information that directly answers
-   the question, so use it.
-4. Do not invent facts, timings, prices, or facilities.
-5. If the information is genuinely unavailable, say:
-   "I couldn't find this information in the available research."
-6. Keep the answer concise but helpful.
-7. Do not repeat the entire hotel report.
+1. Answer the user's question directly.
+2. Use the report and supplied research.
+3. Do not invent facts, prices, timings, or facilities.
+4. If information is unavailable, say so clearly.
+5. Keep the answer concise and helpful.
 """
 
-    try:
-        response = groq.chat.completions.create(
-            model="openai/gpt-oss-120b",
-            messages=[
-                {
-                    "role": "system",
-                    "content": (
-                        "You are a helpful hotel information "
-                        "assistant. Answer using the supplied "
-                        "hotel report and research."
-                    )
-                },
-                {
-                    "role": "user",
-                    "content": prompt
-                }
-            ],
-            temperature=0.3,
-            max_tokens=700
-        )
+    response = groq.chat.completions.create(
+        model="openai/gpt-oss-120b",
+        messages=[
+            {
+                "role": "system",
+                "content": (
+                    "You are a helpful hotel information "
+                    "assistant. Use only supplied context."
+                )
+            },
+            {
+                "role": "user",
+                "content": prompt
+            }
+        ],
+        temperature=0.3,
+        max_tokens=700
+    )
 
-        answer = response.choices[0].message.content
+    return response.choices[0].message.content.strip()
 
         if not answer or not answer.strip():
             return "I couldn't generate an answer right now."
