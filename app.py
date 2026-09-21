@@ -5,8 +5,7 @@ from hotel_agent import (
     search_hotel,
     extract_information,
     analyze_hotel,
-    chat_about_hotel,
-    HotelAgentError
+    chat_about_hotel
 )
 
 
