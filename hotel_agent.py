@@ -268,83 +268,83 @@ Rules:
 # CHAT ASSISTANT
 # ============================================================
 
-
-# ============================================================
-# CHATBOT — HOTEL QUESTIONS
-# ============================================================
-
-
-# ============================================================
-# CHATBOT
-# ============================================================
-
 def chat_about_hotel(
     hotel_name,
     question,
     analysis="",
     sources=None
 ):
+    validate_clients()
+
     sources = sources or []
 
-    source_text = ""
-
-    for index, source in enumerate(sources):
-        source_text += f"""
-SOURCE {index + 1}
-TITLE: {source.get("title", "")}
-CONTENT: {source.get("content", "")}
-URL: {source.get("url", "")}
-"""
-
-    prompt = f"""
-You are StayWise AI, a helpful hotel review assistant.
-
-HOTEL NAME:
-{hotel_name}
-
-GENERATED HOTEL REPORT:
-{analysis}
-
-RESEARCH SOURCES:
-{source_text}
-
-USER QUESTION:
-{question}
-
-INSTRUCTIONS:
-1. Answer the user's question directly.
-2. Use the report and supplied research.
-3. Do not invent facts, prices, timings, or facilities.
-4. If information is unavailable, say so clearly.
-5. Keep the answer concise and helpful.
-"""
-
-    response = groq.chat.completions.create(
-        model="openai/gpt-oss-120b",
-        messages=[
-            {
-                "role": "system",
-                "content": (
-                    "You are a helpful hotel information "
-                    "assistant. Use only supplied context."
-                )
-            },
-            {
-                "role": "user",
-                "content": prompt
-            }
-        ],
-        temperature=0.3,
-        max_tokens=700
+    source_text = "\n".join(
+        f"{source.get('title', '')}: {source.get('url', '')}"
+        for source in sources
     )
 
-    return response.choices[0].message.content.strip()
+    prompt = f"""
+You are StayWise AI, a hotel review assistant.
+
+Hotel:
+{hotel_name}
+
+Existing AI report:
+{analysis}
+
+Research sources:
+{source_text}
+
+User question:
+{question}
+
+Answer using only the available report and research.
+If the information is unavailable, clearly say:
+"Not enough information."
+
+Keep the answer concise and useful.
+"""
+
+    try:
+        response = groq.chat.completions.create(
+            model=GROQ_MODEL,
+            messages=[
+                {
+                    "role": "system",
+                    "content": (
+                        "You are a helpful and evidence-based "
+                        "hotel review assistant."
+                    )
+                },
+                {
+                    "role": "user",
+                    "content": prompt
+                }
+            ],
+            temperature=0.2,
+            max_tokens=1200
+        )
+
+        if not response.choices:
+            raise HotelAgentError(
+                "Groq returned no chat response."
+            )
+
+        answer = response.choices[0].message.content
 
         if not answer or not answer.strip():
-            return "I couldn't generate an answer right now."
+            raise HotelAgentError(
+                "Groq returned an empty chat response."
+            )
 
         return answer.strip()
 
-    except Exception as error:
-        print("CHATBOT GROQ ERROR:", error)
+    except HotelAgentError:
         raise
+
+    except Exception as error:
+        print("CHAT ERROR:", repr(error))
+
+        raise HotelAgentError(
+            f"Chat response failed: {str(error)}"
+        ) from error
