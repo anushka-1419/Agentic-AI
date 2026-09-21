@@ -130,6 +130,7 @@ def analyze():
 # CHAT
 # ============================================================
 
+
 @app.route("/chat", methods=["POST"])
 def chat():
     try:
@@ -149,16 +150,10 @@ def chat():
 
         sources = data.get("sources", [])
 
-        if not hotel_name:
+        if not hotel_name or not question:
             return jsonify({
                 "success": False,
-                "error": "Hotel name is missing."
-            }), 400
-
-        if not question:
-            return jsonify({
-                "success": False,
-                "error": "Please enter a question."
+                "error": "Hotel name and question are required."
             }), 400
 
         answer = chat_about_hotel(
@@ -173,20 +168,12 @@ def chat():
             "answer": answer
         }), 200
 
-    except HotelAgentError as error:
-        print("CHAT AGENT ERROR:", str(error))
-
-        return jsonify({
-            "success": False,
-            "error": str(error)
-        }), 502
-
     except Exception as error:
-        print("CHAT UNEXPECTED ERROR:", repr(error))
+        print("CHAT ROUTE ERROR:", repr(error))
 
         return jsonify({
             "success": False,
-            "error": "Unable to generate chat response."
+            "error": "Unable to generate chatbot response."
         }), 500
 
 
